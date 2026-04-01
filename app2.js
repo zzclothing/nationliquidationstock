@@ -7,6 +7,7 @@ const multer = require("multer");
 const { promisify } = require("util");
 
 const app = express();
+app.set("trust proxy", 1);
 const scrypt = promisify(crypto.scrypt);
 const SITE_NAME = "Nation Liquidation Stock";
 const WHATSAPP_NUMBER = "12294293042";
@@ -401,7 +402,7 @@ app.set("views", path.join(process.cwd(), "views"));
 app.locals.formatCurrency = formatCurrency;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(session({ name: "nls.sid", secret: process.env.SESSION_SECRET || "nation-liquidation-stock-dev-secret", resave: false, saveUninitialized: false, cookie: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 1000 * 60 * 60 * 12 } }));
+app.use(session({ name: "nls.sid", secret: process.env.SESSION_SECRET || "nation-liquidation-stock-dev-secret", resave: false, saveUninitialized: false, proxy: true, cookie: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 1000 * 60 * 60 * 12 } }));
 app.use(express.static(path.join(process.cwd(), "public")));
 app.use((req, res, next) => { req.locale = pickLocale(req); const viewLocale = req.path.startsWith("/admin") ? "en" : req.locale; res.locals.locale = viewLocale; res.locals.t = (key) => t(viewLocale, key); next(); });
 app.use((req, res, next) => { req.flash = (type, message, meta = {}) => { req.session.flashMessages = [...(req.session.flashMessages || []), { type, message, ...meta }]; }; res.locals.flashMessages = req.session.flashMessages || []; delete req.session.flashMessages; next(); });
@@ -577,6 +578,7 @@ app.use((req, res) => res.status(404).render("errors/404", { title: t(req.locale
 app.use((error, req, res, next) => { console.error(error); if (res.headersSent) return next(error); res.status(500).render("errors/500", { title: t(req.locale, "page_title_server_error") }); });
 async function createApp() { await initializeStore(); return app; }
 module.exports = { createApp };
+
 
 
 
