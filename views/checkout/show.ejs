@@ -1,0 +1,34 @@
+﻿<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+<main class="container checkout-grid">
+  <section class="card">
+    <h1><%= t('checkout_heading') %></h1>
+    <% if (typeof errors !== 'undefined') { %><div class="inline-errors"><% errors.forEach((error) => { %><p><%= error %></p><% }) %></div><% } %>
+    <form class="form-grid" action="/checkout/<%= product.id %>" method="post">
+      <input type="number" min="1" max="<%= product.quantityAvailable %>" name="quantity" value="<%= form.quantity %>" placeholder="<%= t('common_quantity') %>" required>
+      <select name="shippingOption">
+        <option value="freight" <%= form.shippingOption === 'freight' ? 'selected' : '' %>><%= t('shipping_freight') %></option>
+        <option value="pickup" <%= form.shippingOption === 'pickup' ? 'selected' : '' %>><%= t('shipping_pickup') %></option>
+      </select>
+      <input type="text" name="contactName" placeholder="<%= t('common_contact_name') %>" value="<%= form.contactName %>" required>
+      <input type="text" name="company" placeholder="<%= t('common_company') %>" value="<%= form.company %>" required>
+      <input type="email" name="email" placeholder="<%= t('common_email') %>" value="<%= form.email %>" required>
+      <input type="text" name="address1" placeholder="<%= t('common_street_address') %>" value="<%= form.address1 %>">
+      <input type="text" name="city" placeholder="<%= t('common_city') %>" value="<%= form.city %>">
+      <input type="text" name="state" placeholder="<%= t('common_state') %>" value="<%= form.state %>">
+      <input type="text" name="postalCode" placeholder="<%= t('common_postal_code') %>" value="<%= form.postalCode %>">
+      <select name="paymentMethod"><option value="mock_card"><%= t('checkout_mock_card') %></option><option value="stripe"><%= t('checkout_stripe_placeholder') %></option></select>
+      <button class="button" type="submit"><%= t('checkout_complete_purchase') %></button>
+    </form>
+  </section>
+  <aside class="card order-summary">
+    <h2><%= t('checkout_summary') %></h2>
+    <p><strong><%= product.title %></strong></p>
+    <p><%= formatCurrency(product.priceCents) %> <%= t('common_per') %> <%= translateUnit(product.unitType) %></p>
+    <p><%= t('checkout_estimated_shipping') %>: <strong><%= formatCurrency(estimate.amountCents) %></strong></p>
+    <p><%= estimate.label %> - <%= estimate.eta %></p>
+    <p class="warning"><%= t('checkout_warning') %></p>
+  </aside>
+</main>
+<%- include('../partials/footer') %>

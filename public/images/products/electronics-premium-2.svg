@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#8d3d08"/>
+  <rect x="90" y="90" width="1020" height="720" rx="40" fill="#c55a11"/>
+  <rect x="150" y="160" width="900" height="460" rx="30" fill="#fffaf2"/>
+  <rect x="210" y="220" width="240" height="250" rx="24" fill="#12344d"/>
+  <rect x="490" y="220" width="220" height="120" rx="18" fill="#12344d"/>
+  <rect x="490" y="370" width="220" height="100" rx="18" fill="#12344d"/>
+  <rect x="760" y="220" width="170" height="250" rx="24" fill="#12344d"/>
+  <text x="150" y="705" fill="#fffaf2" font-family="Arial, sans-serif" font-size="68" font-weight="700">Amazon Returns</text>
+  <text x="150" y="765" fill="#f7d8bf" font-family="Arial, sans-serif" font-size="38">Smart-home and electronics assortment</text>
+</svg>

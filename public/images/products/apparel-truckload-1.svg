@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#5f2d0b"/>
+  <rect x="80" y="110" width="1040" height="680" rx="36" fill="#7f3b0f"/>
+  <rect x="120" y="180" width="960" height="420" rx="24" fill="#f8f1e6"/>
+  <path d="M260 270h120l55 80 55-80h120v250H260z" fill="#c55a11"/>
+  <path d="M650 280h110l40 60 40-60h110v230H650z" fill="#12344d"/>
+  <circle cx="340" cy="610" r="46" fill="#ec9d32"/>
+  <circle cx="860" cy="610" r="46" fill="#ec9d32"/>
+  <text x="120" y="710" fill="#fffaf2" font-family="Arial, sans-serif" font-size="68" font-weight="700">Walmart Apparel Overstock</text>
+  <text x="120" y="770" fill="#efd5bf" font-family="Arial, sans-serif" font-size="38">Truckload for outlets, exports, and discount retail</text>
+</svg>

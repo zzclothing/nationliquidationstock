@@ -1,0 +1,53 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+<main class="container section-block">
+  <div class="section-heading">
+    <div><p class="eyebrow">Platform control</p><h1>Admin dashboard</h1></div>
+    <a class="button" href="/admin/products/new">Add inventory</a>
+  </div>
+  <section class="stats-grid">
+    <article class="card"><strong><%= formatCurrency(analytics.totalSalesCents) %></strong><span>Sales</span></article>
+    <article class="card"><strong><%= analytics.ordersCount %></strong><span>Orders</span></article>
+    <article class="card"><strong><%= analytics.inventoryUnits %></strong><span>Inventory units</span></article>
+    <article class="card"><strong><%= analytics.openInquiries %></strong><span>Open inquiries</span></article>
+  </section>
+  <section class="section-block">
+    <h2>Catalog</h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Title</th><th>Category</th><th>Price</th><th>Qty</th><th></th></tr></thead>
+        <tbody>
+          <% products.forEach((product) => { %>
+            <tr>
+              <td><%= product.title %></td>
+              <td><%= product.category %></td>
+              <td><%= formatCurrency(product.priceCents) %></td>
+              <td><%= product.quantityAvailable %></td>
+              <td class="actions-cell">
+                <a href="/admin/products/<%= product.id %>/edit">Edit</a>
+                <form action="/admin/products/<%= product.id %>/delete" method="post"><button type="submit">Delete</button></form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="section-block">
+    <h2>Recent orders</h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Order</th><th>Buyer</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody><% orders.forEach((order) => { %><tr><td>#<%= order.id.slice(0, 8) %></td><td><%= order.buyerName %></td><td><%= formatCurrency(order.totalCents) %></td><td><%= order.paymentStatus %></td></tr><% }) %></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="section-block">
+    <h2>Customer inquiries</h2>
+    <div class="card inquiry-stack">
+      <% inquiries.forEach((inquiry) => { %><article><strong><%= inquiry.company %></strong><p><%= inquiry.name %> - <%= inquiry.email %></p><p><%= inquiry.message %></p></article><% }) %>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>

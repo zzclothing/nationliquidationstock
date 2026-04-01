@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#34284f"/>
+  <rect x="70" y="90" width="1060" height="720" rx="36" fill="#4b3f72"/>
+  <rect x="130" y="150" width="940" height="500" rx="28" fill="#faf5ff"/>
+  <rect x="220" y="300" width="320" height="130" rx="65" fill="#12344d"/>
+  <circle cx="320" cy="365" r="24" fill="#ec9d32"/>
+  <circle cx="440" cy="365" r="24" fill="#c55a11"/>
+  <rect x="650" y="240" width="220" height="220" rx="24" fill="#8d3d08"/>
+  <rect x="900" y="240" width="70" height="220" rx="18" fill="#c55a11"/>
+  <text x="130" y="730" fill="#fffaf2" font-family="Arial, sans-serif" font-size="68" font-weight="700">Gaming Accessories Returns</text>
+  <text x="130" y="790" fill="#ddd6fe" font-family="Arial, sans-serif" font-size="38">Controllers, streaming gear, and LED kits</text>
+</svg>

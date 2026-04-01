@@ -1,0 +1,32 @@
+﻿<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+<main class="container auth-shell">
+  <form class="card form-grid auth-card" action="<%= formAction %>" method="post" enctype="multipart/form-data">
+    <h1><%= title %></h1>
+    <% if (typeof errors !== 'undefined') { %><div class="inline-errors"><% errors.forEach((error) => { %><p><%= error %></p><% }) %></div><% } %>
+    <input type="text" name="title" placeholder="Title" value="<%= product.title || '' %>" required>
+    <textarea name="description" placeholder="Description" required><%= product.description || '' %></textarea>
+    <select name="category"><% categories.forEach((category) => { %><option value="<%= category %>" <%= product.category === category ? 'selected' : '' %>><%= category %></option><% }) %></select>
+    <select name="condition"><% conditions.forEach((condition) => { %><option value="<%= condition %>" <%= product.condition === condition ? 'selected' : '' %>><%= condition %></option><% }) %></select>
+    <select name="unitType"><option value="pallet" <%= product.unitType === 'pallet' ? 'selected' : '' %>>Pallet</option><option value="truckload" <%= product.unitType === 'truckload' ? 'selected' : '' %>>Truckload</option></select>
+    <input type="number" step="0.01" name="price" placeholder="Price" value="<%= product.priceCents ? product.priceCents / 100 : '' %>" required>
+    <input type="number" min="1" name="quantityAvailable" placeholder="Quantity" value="<%= product.quantityAvailable || 1 %>" required>
+    <textarea name="imageUrls" placeholder="Image URLs or local paths, one per line"><%= (product.images || []).join('\n') %></textarea>
+    <p class="small-copy">Add product photos in either of these ways: paste image paths or URLs above, or upload image files below.</p>
+    <p class="small-copy">Examples: <code>/images/products/my-pallet.jpg</code>, <code>/uploads/my-upload.jpg</code>, or <code>https://example.com/photo.jpg</code>.</p>
+    <input type="file" name="imageFiles" multiple accept="image/*">
+    <p class="small-copy">Files uploaded here are saved into <code>public/uploads</code>. Product photo references are stored in the <code>images</code> array inside <code>data/products.json</code>.</p>
+    <% if (product.images && product.images.length) { %>
+      <div class="thumb-grid">
+        <% product.images.forEach((image) => { %>
+          <img src="<%= image %>" alt="Product image preview">
+        <% }) %>
+      </div>
+    <% } %>
+    <textarea name="manifest" placeholder="Manifest lines, one per line"><%= (product.manifest || []).join('\n') %></textarea>
+    <label class="checkbox-row"><input type="checkbox" name="featured" <%= product.featured ? 'checked' : '' %>> Featured listing</label>
+    <button class="button" type="submit"><%= submitLabel %></button>
+  </form>
+</main>
+<%- include('../partials/footer') %>

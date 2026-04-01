@@ -1,0 +1,60 @@
+﻿<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+<main class="container section-block">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow"><%= t('dashboard_eyebrow') %></p>
+      <h1><%= t('dashboard_welcome') %>, <%= currentUser.name %></h1>
+    </div>
+    <span><%= currentUser.company %></span>
+  </div>
+  <% if (!currentUser.emailVerified) { %>
+    <section class="card verification-card">
+      <h2><%= t('dashboard_email_verification_required') %></h2>
+      <p><%= t('dashboard_verify_before_checkout') %></p>
+      <% if (verification) { %><a class="button button-small" href="/verify-email?token=<%= verification.token %>"><%= t('dashboard_verify_now') %></a><% } %>
+      <form action="/resend-verification" method="post"><button class="button button-ghost button-small" type="submit"><%= t('dashboard_generate_fresh_link') %></button></form>
+    </section>
+  <% } %>
+  <section class="stats-grid">
+    <article class="card"><strong><%= orderHistory.length %></strong><span><%= t('dashboard_total_orders') %></span></article>
+    <article class="card"><strong><%= savedProducts.length %></strong><span><%= t('dashboard_saved_pallets') %></span></article>
+    <article class="card"><strong><%= currentUser.emailVerified ? t('dashboard_verified') : t('dashboard_pending') %></strong><span><%= t('dashboard_account_status') %></span></article>
+  </section>
+  <section class="section-block">
+    <h2><%= t('dashboard_saved_pallets') %></h2>
+    <div class="product-grid">
+      <% savedProducts.forEach((product) => { %>
+        <article class="product-card card">
+          <img src="<%= product.images[0] %>" alt="<%= product.title %>">
+          <div class="product-card-body">
+            <h3><%= product.title %></h3>
+            <p><%= product.description %></p>
+            <a class="button button-small" href="/products/<%= product.slug %>"><%= t('dashboard_open_load') %></a>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+  <section class="section-block">
+    <h2><%= t('dashboard_order_history') %></h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th><%= t('dashboard_order') %></th><th><%= t('dashboard_items') %></th><th><%= t('dashboard_total') %></th><th><%= t('dashboard_date') %></th><th></th></tr></thead>
+        <tbody>
+          <% orderHistory.forEach((order) => { %>
+            <tr>
+              <td>#<%= order.id.slice(0, 8) %></td>
+              <td><%= order.items[0].title %></td>
+              <td><%= formatCurrency(order.totalCents) %></td>
+              <td><%= new Date(order.createdAt).toLocaleDateString(locale) %></td>
+              <td><a href="/orders/<%= order.id %>"><%= t('dashboard_view') %></a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<%- include('../partials/footer') %>

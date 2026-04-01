@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#384454"/>
+  <rect x="70" y="80" width="1060" height="740" rx="36" fill="#4c5d73"/>
+  <rect x="130" y="150" width="940" height="500" rx="28" fill="#f3ece1"/>
+  <rect x="180" y="220" width="180" height="180" rx="20" fill="#c55a11"/>
+  <rect x="400" y="220" width="180" height="180" rx="20" fill="#12344d"/>
+  <rect x="620" y="220" width="180" height="180" rx="20" fill="#8d3d08"/>
+  <rect x="840" y="220" width="180" height="180" rx="20" fill="#ec9d32"/>
+  <rect x="230" y="450" width="700" height="110" rx="20" fill="#6b7280"/>
+  <text x="130" y="735" fill="#fffaf2" font-family="Arial, sans-serif" font-size="68" font-weight="700">Mixed General Merchandise</text>
+  <text x="130" y="790" fill="#d9cfbf" font-family="Arial, sans-serif" font-size="38">Toys, beauty, home, and impulse goods</text>
+</svg>

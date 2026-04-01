@@ -1,0 +1,156 @@
+[
+  {
+    "id": "p-elec-01",
+    "slug": "amazon-electronics-returns-premium-pallet",
+    "soldAsIs": true,
+    "createdAt": "2026-03-04T10:00:00.000Z",
+    "updatedAt": "2026-03-31T15:16:44.826Z",
+    "title": "Amazon Electronics Returns Premium Pallet",
+    "description": "High-value customer-return electronics with smart-home accessories, headphones, gaming gear, and small appliances.",
+    "category": "Electronics",
+    "condition": "Returns",
+    "unitType": "pallet",
+    "priceCents": 189900,
+    "quantityAvailable": 30,
+    "images": [
+      "/uploads/1774964842556-798da2a2-9aa2-4e94-8429-a4712563df1c.jpeg",
+      "/uploads/1774964842581-61d4f226-54c6-4e24-93db-998a3d1c513e.jpeg",
+      "/uploads/1774964842609-5c7bd3ad-0f8a-46f0-83bc-b9321e987289.jpeg"
+    ],
+    "manifest": [
+      "Bluetooth speakers and soundbars",
+      "Smart plugs and ring lights",
+      "Tablet accessories and keyboards",
+      "Mixed small appliances"
+    ],
+    "featured": true
+  },
+  {
+    "id": "p-clothing-01",
+    "slug": "walmart-apparel-overstock-truckload",
+    "soldAsIs": true,
+    "createdAt": "2026-03-05T10:00:00.000Z",
+    "updatedAt": "2026-03-31T15:16:08.244Z",
+    "title": "Walmart Apparel Overstock Truckload",
+    "description": "Seasonal basics and branded overstock apparel packed for export, discount stores, and online resale.",
+    "category": "Clothing",
+    "condition": "Overstock",
+    "unitType": "truckload",
+    "priceCents": 925000,
+    "quantityAvailable": 70,
+    "images": [
+      "/uploads/1774965500814-1dcec5ee-8760-4b0d-aaed-d5004a44e14c.jpeg",
+      "/uploads/1774965500847-e24a595b-604c-4db2-96df-c1d2aad6fec2.jpeg",
+      "/uploads/1774965500869-9b8affd7-febc-4d8b-9d95-2d3eff896ce3.jpeg",
+      "/uploads/1774965500884-661240fe-0791-407b-a815-21f48435c65e.jpeg"
+    ],
+    "manifest": [
+      "Adult basics and fleece",
+      "Kids sleepwear and denim",
+      "Shoes and accessories"
+    ],
+    "featured": true
+  },
+  {
+    "id": "p-mixed-01",
+    "slug": "mixed-general-merchandise-value-pallet",
+    "soldAsIs": true,
+    "createdAt": "2026-03-07T10:00:00.000Z",
+    "updatedAt": "2026-03-31T15:19:59.006Z",
+    "title": "Mixed General Merchandise Value Pallet",
+    "description": "General merchandise mix with toys, home essentials, beauty, and impulse items from major retail channels.",
+    "category": "Mixed",
+    "condition": "Mixed",
+    "unitType": "pallet",
+    "priceCents": 109500,
+    "quantityAvailable": 9,
+    "images": [
+      "/uploads/1774964597163-62c62d8b-0494-40ba-a742-7df89a257454.jpeg",
+      "/uploads/1774964597189-1c03fd1d-2fa2-4b2d-98fb-ae784f1f04d3.jpeg",
+      "/uploads/1774964514731-972006d0-3a9c-4fca-9fda-a740f8a88c90.jpeg",
+      "/uploads/1774964597163-62c62d8b-0494-40ba-a742-7df89a257454.jpeg",
+      "/uploads/1774964597189-1c03fd1d-2fa2-4b2d-98fb-ae784f1f04d3.jpeg"
+    ],
+    "manifest": [
+      "Toys and seasonal decor",
+      "Kitchen gadgets",
+      "Beauty accessories",
+      "Impulse checkout items"
+    ],
+    "featured": true
+  },
+  {
+    "id": "p-home-01",
+    "slug": "target-home-goods-overstock-pallet",
+    "soldAsIs": true,
+    "createdAt": "2026-03-08T10:00:00.000Z",
+    "updatedAt": "2026-03-31T15:16:24.948Z",
+    "title": "Target Home Goods Overstock Pallet",
+    "description": "Home goods overstock including decor, bedding, kitchenware, and storage solutions.",
+    "category": "Home Goods",
+    "condition": "Overstock",
+    "unitType": "pallet",
+    "priceCents": 154000,
+    "quantityAvailable": 50,
+    "images": [
+      "/uploads/1774965723907-5eadca02-b9f7-4d8d-ae04-2273bd6184f0.jpeg",
+      "/uploads/1774965723927-03a3ae14-5884-4472-842b-51cb16c628db.jpeg",
+      "/uploads/1774965723940-23b30d96-26b5-492a-b9c9-7e88020b6b5b.jpeg",
+      "/uploads/1774965723961-9c5f6111-8705-4c4c-97c8-218baf413ff1.jpeg"
+    ],
+    "manifest": [
+      "Throw pillows and comforters",
+      "Kitchen organizers",
+      "Decor accents",
+      "Storage bins"
+    ],
+    "featured": false
+  },
+  {
+    "id": "p-elec-02",
+    "slug": "walmart-gaming-accessories-returns-pallet",
+    "soldAsIs": true,
+    "createdAt": "2026-03-11T10:00:00.000Z",
+    "updatedAt": "2026-03-31T15:16:59.457Z",
+    "title": "Walmart Gaming Accessories Returns Pallet",
+    "description": "Controller bundles, streaming gear, LED lighting, and gaming desk accessories sold as-is.",
+    "category": "Electronics",
+    "condition": "Returns",
+    "unitType": "pallet",
+    "priceCents": 167500,
+    "quantityAvailable": 25,
+    "images": [
+      "/images/products/gaming-returns-1.svg"
+    ],
+    "manifest": [
+      "Controllers and headset assortments",
+      "Webcams and microphones",
+      "RGB lighting kits"
+    ],
+    "featured": false
+  },
+  {
+    "id": "p-mixed-02",
+    "slug": "customer-returns-bargain-pallet",
+    "title": "Customer Returns Bargain Pallet",
+    "description": "Budget-friendly mixed pallet for flea markets, value stores, and test-buying new categories.",
+    "category": "Mixed",
+    "condition": "Returns",
+    "unitType": "pallet",
+    "priceCents": 84500,
+    "quantityAvailable": 18,
+    "images": [
+      "/images/products/bargain-returns-1.svg"
+    ],
+    "manifest": [
+      "Soft goods",
+      "Small electronics",
+      "Home utility items",
+      "Assorted shelf pulls"
+    ],
+    "featured": false,
+    "soldAsIs": true,
+    "createdAt": "2026-03-12T10:00:00.000Z",
+    "updatedAt": "2026-03-22T10:00:00.000Z"
+  }
+]

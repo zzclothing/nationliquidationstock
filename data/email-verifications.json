@@ -1,0 +1,9 @@
+[
+  {
+    "id": "ver-1001",
+    "userId": "u-buyer-02",
+    "token": "verify-demo-token",
+    "createdAt": "2026-03-20T09:00:00.000Z",
+    "expiresAt": "2026-04-20T09:00:00.000Z"
+  }
+]

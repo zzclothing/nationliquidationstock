@@ -1,0 +1,43 @@
+﻿<header class="site-header">
+  <div class="container nav-shell">
+    <a class="brand" href="/">
+      <span class="brand-mark">NLS</span>
+      <span class="brand-copy">
+        <strong>Nation Liquidation Stock</strong>
+        <small><%= t('header_tagline') %></small>
+      </span>
+    </a>
+
+    <nav class="site-nav">
+      <a href="/" class="<%= currentPath === '/' ? 'is-active' : '' %>"><%= t('nav_home') %></a>
+      <a href="/products" class="<%= currentPath.startsWith('/products') ? 'is-active' : '' %>"><%= t('nav_products') %></a>
+      <% if (currentUser && currentUser.role === 'buyer') { %>
+        <a href="/dashboard" class="<%= currentPath.startsWith('/dashboard') ? 'is-active' : '' %>"><%= t('nav_dashboard') %></a>
+      <% } %>
+      <% if (currentUser && currentUser.role === 'admin') { %>
+        <a href="/admin" class="<%= currentPath.startsWith('/admin') ? 'is-active' : '' %>"><%= t('nav_admin') %></a>
+      <% } %>
+    </nav>
+
+    <div class="nav-actions">
+      <div class="lang-switcher">
+        <% supportedLocales.forEach((lang) => { %>
+          <a class="lang-pill <%= locale === lang.value ? 'active' : '' %>" href="/set-language/<%= lang.value %>"><%= lang.label %></a>
+        <% }) %>
+      </div>
+
+      <% if (!currentUser) { %>
+        <a class="nav-login" href="/login"><%= t('nav_login') %></a>
+        <a class="button button-small nav-cta" href="/register"><%= t('nav_register') %></a>
+      <% } else { %>
+        <div class="nav-user-chip">
+          <span><%= currentUser.name %></span>
+          <small><%= currentUser.role === 'admin' ? t('role_admin') : t('role_buyer') %></small>
+        </div>
+        <form action="/logout" method="post">
+          <button class="button button-small button-ghost" type="submit"><%= t('nav_logout') %></button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</header>

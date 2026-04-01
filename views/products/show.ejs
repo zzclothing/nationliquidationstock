@@ -1,0 +1,70 @@
+﻿<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+<main class="container product-detail">
+  <section class="gallery-column">
+    <img class="hero-image" src="<%= product.images[0] %>" alt="<%= product.title %>">
+    <div class="thumb-grid">
+      <% product.images.forEach((image) => { %><img src="<%= image %>" alt="<%= product.title %>"><% }) %>
+    </div>
+  </section>
+  <section class="detail-column">
+    <p class="eyebrow"><%= translateCategory(product.category) %> / <%= translateCondition(product.condition) %></p>
+    <h1><%= product.title %></h1>
+    <p class="detail-copy"><%= product.description %></p>
+    <div class="card buy-box">
+      <div class="buy-row"><strong><%= formatCurrency(product.priceCents) %></strong><span><%= t('common_per') %> <%= translateUnit(product.unitType) %></span></div>
+      <div class="buy-row"><span><%= product.quantityAvailable %> <%= t('products_available') %></span><span><%= product.reviewCount %> <%= t('products_reviews') %></span></div>
+      <p class="warning"><%= t('product_warning') %></p>
+      <div class="button-row">
+        <a class="button" href="/checkout/<%= product.id %>"><%= t('product_buy_now') %></a>
+        <% if (currentUser && currentUser.role === 'buyer') { %><form action="/products/<%= product.id %>/save" method="post"><button class="button button-ghost" type="submit"><%= isSaved ? t('product_saved') : t('product_save') %></button></form><% } %>
+      </div>
+    </div>
+    <div class="card">
+      <p class="eyebrow"><%= t('product_manifest_eyebrow') %></p>
+      <h2><%= t('product_manifest_title') %></h2>
+      <% if (product.manifest && product.manifest.length) { %><ul class="manifest-list"><% product.manifest.forEach((line) => { %><li><%= line %></li><% }) %></ul><% } else { %><p><%= t('product_manifest_empty') %></p><% } %>
+    </div>
+    <div class="card">
+      <p class="eyebrow"><%= t('product_logistics_eyebrow') %></p>
+      <h2><%= t('product_logistics_title') %></h2>
+      <form action="/products/<%= product.slug %>" method="get" class="inline-form">
+        <select name="shippingOption"><option value="freight"><%= t('shipping_freight') %></option><option value="pickup"><%= t('shipping_pickup') %></option></select>
+        <input type="text" name="postalCode" placeholder="<%= t('product_postal_code') %>">
+        <input type="number" min="1" name="quantity" placeholder="<%= t('product_qty') %>">
+        <button class="button button-small" type="submit"><%= t('product_estimate') %></button>
+      </form>
+      <% if (estimate) { %><p class="estimate-line"><strong><%= formatCurrency(estimate.amountCents) %></strong> - <%= estimate.label %> - <%= estimate.eta %></p><% } %>
+    </div>
+  </section>
+  <section class="detail-lower">
+    <div class="card">
+      <p class="eyebrow"><%= t('product_reviews_eyebrow') %></p>
+      <h2><%= t('product_reviews_title') %></h2>
+      <% if (product.reviews.length) { %>
+        <div class="review-stack">
+          <% product.reviews.forEach((review) => { %>
+            <article class="review-item">
+              <strong><%= review.buyerName %></strong>
+              <span>&#9733;<%= ' &#9733;'.repeat(review.rating - 1) %></span>
+              <% if (review.title) { %><h3><%= review.title %></h3><% } %>
+              <p><%= review.comment %></p>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %><p><%= t('product_no_reviews') %></p><% } %>
+    </div>
+    <% if (canReview) { %>
+      <form class="card form-grid" action="/products/<%= product.id %>/reviews" method="post">
+        <p class="eyebrow"><%= t('product_share_feedback') %></p>
+        <h2><%= t('product_leave_review') %></h2>
+        <select name="rating" required><option value=""><%= t('product_rating') %></option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select>
+        <input type="text" name="title" placeholder="<%= t('product_headline') %>">
+        <textarea name="comment" placeholder="<%= t('product_review_placeholder') %>" required></textarea>
+        <button class="button" type="submit"><%= t('product_publish_review') %></button>
+      </form>
+    <% } %>
+  </section>
+</main>
+<%- include('../partials/footer') %>

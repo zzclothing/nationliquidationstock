@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#12344d"/>
+  <rect x="70" y="80" width="1060" height="740" rx="36" fill="#1b4c6d"/>
+  <rect x="120" y="140" width="960" height="520" rx="28" fill="#f4efe6"/>
+  <rect x="170" y="220" width="230" height="160" rx="18" fill="#c55a11"/>
+  <rect x="430" y="220" width="230" height="160" rx="18" fill="#8d3d08"/>
+  <rect x="690" y="220" width="230" height="160" rx="18" fill="#ec9d32"/>
+  <rect x="240" y="430" width="140" height="140" rx="70" fill="#12344d"/>
+  <rect x="470" y="430" width="160" height="110" rx="18" fill="#12344d"/>
+  <rect x="700" y="420" width="170" height="140" rx="24" fill="#12344d"/>
+  <text x="120" y="735" fill="#f4efe6" font-family="Arial, sans-serif" font-size="68" font-weight="700">Nation Liquidation Stock</text>
+  <text x="120" y="790" fill="#d9cfbf" font-family="Arial, sans-serif" font-size="38">Amazon Electronics Returns Premium Pallet</text>
+</svg>

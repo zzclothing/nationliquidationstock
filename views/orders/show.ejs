@@ -1,0 +1,25 @@
+﻿<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/alerts') %>
+<main class="container section-block">
+  <section class="card receipt-card">
+    <p class="eyebrow"><%= t('order_receipt_eyebrow') %></p>
+    <h1><%= t('order_receipt') %> #<%= order.id.slice(0, 8) %></h1>
+    <div class="receipt-grid">
+      <div><span><%= t('order_buyer') %></span><strong><%= order.buyerName %></strong></div>
+      <div><span><%= t('order_company') %></span><strong><%= order.company %></strong></div>
+      <div><span><%= t('order_status') %></span><strong><%= order.paymentStatus %></strong></div>
+      <div><span><%= t('order_placed') %></span><strong><%= new Date(order.createdAt).toLocaleString(locale) %></strong></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th><%= t('order_item') %></th><th><%= t('order_qty') %></th><th><%= t('order_unit_price') %></th><th><%= t('order_subtotal') %></th></tr></thead>
+        <tbody><tr><td><%= order.items[0].title %></td><td><%= order.items[0].quantity %></td><td><%= formatCurrency(order.items[0].unitPriceCents) %></td><td><%= formatCurrency(order.subtotalCents) %></td></tr></tbody>
+      </table>
+    </div>
+    <p><%= t('order_shipping') %>: <strong><%= formatCurrency(order.shippingCents) %></strong> - <%= order.shippingOption === 'pickup' ? t('shipping_pickup') : t('shipping_freight') %></p>
+    <p><%= t('order_total') %>: <strong><%= formatCurrency(order.totalCents) %></strong></p>
+    <a class="button" href="<%= whatsAppOrderLink %>" target="_blank" rel="noreferrer"><%= t('order_open_whatsapp') %></a>
+  </section>
+</main>
+<%- include('../partials/footer') %>

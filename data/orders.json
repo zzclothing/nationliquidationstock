@@ -1,0 +1,206 @@
+[
+  {
+    "id": "be72d7dd-08dd-489f-a994-c140f01c4d1f",
+    "buyerId": "u-buyer-01",
+    "buyerName": "Amaka Johnson",
+    "company": "Metro Bin Outlet",
+    "email": "buyer@nationliquidationstock.com",
+    "items": [
+      {
+        "productId": "p-mixed-01",
+        "slug": "mixed-general-merchandise-value-pallet",
+        "title": "Mixed General Merchandise Value Pallet",
+        "quantity": 3,
+        "unitPriceCents": 109500,
+        "unitType": "pallet"
+      }
+    ],
+    "shippingOption": "freight",
+    "shippingLabel": "Freight delivery",
+    "shippingEta": "3-5 business days",
+    "shippingCents": 32400,
+    "subtotalCents": 328500,
+    "totalCents": 360900,
+    "paymentMethod": "mock_card",
+    "paymentStatus": "paid",
+    "shippingAddress": {
+      "contactName": "Amaka Johnson",
+      "company": "Metro Bin Outlet",
+      "address1": "Odza",
+      "city": "Yaoundé",
+      "state": "ghjkioo",
+      "postalCode": "00078"
+    },
+    "createdAt": "2026-03-31T15:19:59.006Z"
+  },
+  {
+    "id": "a222d8cd-1f7d-459b-ab35-8d7e12d38970",
+    "buyerId": "u-buyer-01",
+    "buyerName": "Amaka Johnson",
+    "company": "Metro Bin Outlet",
+    "email": "buyer@nationliquidationstock.com",
+    "items": [
+      {
+        "productId": "p-mixed-01",
+        "slug": "mixed-general-merchandise-value-pallet",
+        "title": "Mixed General Merchandise Value Pallet",
+        "quantity": 1,
+        "unitPriceCents": 109500,
+        "unitType": "pallet"
+      }
+    ],
+    "shippingOption": "freight",
+    "shippingLabel": "Freight delivery",
+    "shippingEta": "3-5 business days",
+    "shippingCents": 23400,
+    "subtotalCents": 109500,
+    "totalCents": 132900,
+    "paymentMethod": "stripe",
+    "paymentStatus": "paid",
+    "shippingAddress": {
+      "contactName": "Amaka Johnson",
+      "company": "Metro Bin Outlet",
+      "address1": "Odza",
+      "city": "Yaoundé",
+      "state": "ghjkioo",
+      "postalCode": "00078"
+    },
+    "createdAt": "2026-03-31T15:01:23.605Z"
+  },
+  {
+    "id": "c736c9f2-b707-498c-850a-d43eeb869c1f",
+    "buyerId": "u-buyer-01",
+    "buyerName": "Amaka Johnson",
+    "company": "Metro Bin Outlet",
+    "email": "buyer@nationliquidationstock.com",
+    "items": [
+      {
+        "productId": "p-mixed-01",
+        "slug": "mixed-general-merchandise-value-pallet",
+        "title": "Mixed General Merchandise Value Pallet",
+        "quantity": 1,
+        "unitPriceCents": 109500,
+        "unitType": "pallet"
+      }
+    ],
+    "shippingOption": "freight",
+    "shippingLabel": "Freight delivery",
+    "shippingEta": "3-5 business days",
+    "shippingCents": 23400,
+    "subtotalCents": 109500,
+    "totalCents": 132900,
+    "paymentMethod": "stripe",
+    "paymentStatus": "paid",
+    "shippingAddress": {
+      "contactName": "Amaka Johnson",
+      "company": "Metro Bin Outlet",
+      "address1": "Odza",
+      "city": "Yaoundé",
+      "state": "ghjkioo",
+      "postalCode": "00078"
+    },
+    "createdAt": "2026-03-27T09:36:17.434Z"
+  },
+  {
+    "id": "9b1566be-a7d9-4770-b559-20fb887a5692",
+    "buyerId": "3aa37cd1-3666-4050-8fcb-829f4d9c9671",
+    "buyerName": "monis",
+    "company": "Cio",
+    "email": "bouzapsteve@gmail.com",
+    "items": [
+      {
+        "productId": "p-elec-01",
+        "slug": "amazon-electronics-returns-premium-pallet",
+        "title": "Amazon Electronics Returns Premium Pallet",
+        "quantity": 1,
+        "unitPriceCents": 189900,
+        "unitType": "pallet"
+      }
+    ],
+    "shippingOption": "freight",
+    "shippingLabel": "Freight delivery",
+    "shippingEta": "3-5 business days",
+    "shippingCents": 26100,
+    "subtotalCents": 189900,
+    "totalCents": 216000,
+    "paymentMethod": "mock_card",
+    "paymentStatus": "paid",
+    "shippingAddress": {
+      "contactName": "monis",
+      "company": "Cio",
+      "address1": "jouvence",
+      "city": "Yaoundé",
+      "state": "566777",
+      "postalCode": "098789"
+    },
+    "createdAt": "2026-03-24T23:13:05.413Z"
+  },
+  {
+    "id": "28c5af44-2767-4aa7-81b8-6c8bdcdb37f4",
+    "buyerId": "d9935812-d6d6-4020-8acf-2aa023eb2213",
+    "buyerName": "Bouzap Steve ivanel",
+    "company": "Cio",
+    "email": "madridlond@gmail.com",
+    "items": [
+      {
+        "productId": "p-mixed-01",
+        "slug": "mixed-general-merchandise-value-pallet",
+        "title": "Mixed General Merchandise Value Pallet",
+        "quantity": 1,
+        "unitPriceCents": 109500,
+        "unitType": "pallet"
+      }
+    ],
+    "shippingOption": "freight",
+    "shippingLabel": "Freight delivery",
+    "shippingEta": "3-5 business days",
+    "shippingCents": 23400,
+    "subtotalCents": 109500,
+    "totalCents": 132900,
+    "paymentMethod": "stripe",
+    "paymentStatus": "paid",
+    "shippingAddress": {
+      "contactName": "Bouzap Steve ivanel",
+      "company": "Cio",
+      "address1": "Odza",
+      "city": "Yaoundé",
+      "state": "ghjkioo",
+      "postalCode": "00078"
+    },
+    "createdAt": "2026-03-23T15:26:04.320Z"
+  },
+  {
+    "id": "ord-1001",
+    "buyerId": "u-buyer-01",
+    "buyerName": "Amaka Johnson",
+    "company": "Metro Bin Outlet",
+    "email": "buyer@nationliquidationstock.com",
+    "items": [
+      {
+        "productId": "p-elec-01",
+        "slug": "amazon-electronics-returns-premium-pallet",
+        "title": "Amazon Electronics Returns Premium Pallet",
+        "quantity": 1,
+        "unitPriceCents": 189900,
+        "unitType": "pallet"
+      }
+    ],
+    "shippingOption": "freight",
+    "shippingLabel": "Freight delivery",
+    "shippingEta": "3-5 business days",
+    "shippingCents": 26100,
+    "subtotalCents": 189900,
+    "totalCents": 216000,
+    "paymentMethod": "mock_card",
+    "paymentStatus": "paid",
+    "shippingAddress": {
+      "contactName": "Amaka Johnson",
+      "company": "Metro Bin Outlet",
+      "address1": "121 Market Row",
+      "city": "Houston",
+      "state": "TX",
+      "postalCode": "77002"
+    },
+    "createdAt": "2026-03-15T14:30:00.000Z"
+  }
+]

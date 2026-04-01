@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#556b2f"/>
+  <rect x="90" y="100" width="1020" height="700" rx="38" fill="#6d8442"/>
+  <rect x="150" y="170" width="900" height="470" rx="24" fill="#f9f4ea"/>
+  <rect x="210" y="250" width="240" height="160" rx="18" fill="#c55a11"/>
+  <rect x="500" y="230" width="260" height="220" rx="20" fill="#12344d"/>
+  <rect x="810" y="260" width="120" height="180" rx="18" fill="#8d3d08"/>
+  <text x="150" y="720" fill="#fffaf2" font-family="Arial, sans-serif" font-size="68" font-weight="700">Target Home Goods Overstock</text>
+  <text x="150" y="780" fill="#e2e8d0" font-family="Arial, sans-serif" font-size="38">Decor, bedding, kitchenware, and storage</text>
+</svg>

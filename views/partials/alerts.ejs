@@ -1,0 +1,10 @@
+<% if ((flashMessages || []).length) { %>
+  <section class="container flash-stack">
+    <% flashMessages.forEach((entry) => { %>
+      <article class="flash flash-<%= entry.type %>">
+        <p><%= entry.message %></p>
+        <% if (entry.link) { %><a href="<%= entry.link %>"><%= entry.linkText || 'Open' %></a><% } %>
+      </article>
+    <% }) %>
+  </section>
+<% } %>

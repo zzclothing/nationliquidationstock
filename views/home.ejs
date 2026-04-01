@@ -1,0 +1,92 @@
+﻿<%- include('partials/head') %>
+<%- include('partials/header') %>
+<%- include('partials/alerts') %>
+<main>
+  <section class="hero-section hero-modern">
+    <div class="container hero-grid">
+      <div class="hero-copy-block">
+        <p class="eyebrow"><%= t('home_hero_eyebrow') %></p>
+        <h1><%= t('home_hero_title') %></h1>
+        <p class="hero-copy"><%= t('home_hero_copy') %></p>
+        <div class="hero-actions">
+          <a class="button" href="/products"><%= t('home_browse_inventory') %></a>
+          <a class="button button-ghost" href="/register"><%= t('home_create_account') %></a>
+        </div>
+        <div class="hero-ribbon-grid">
+          <article><strong><%= t('home_badge_direct_title') %></strong><span><%= t('home_badge_direct_text') %></span></article>
+          <article><strong><%= t('home_badge_asis_title') %></strong><span><%= t('home_badge_asis_text') %></span></article>
+          <article><strong><%= t('home_badge_speed_title') %></strong><span><%= t('home_badge_speed_text') %></span></article>
+        </div>
+      </div>
+      <div class="hero-side-stack">
+        <div class="hero-glass-card card">
+          <span class="eyebrow"><%= t('home_snapshot_label') %></span>
+          <div class="metric-list">
+            <article><strong><%= analytics.ordersCount %></strong><span><%= t('home_paid_orders') %></span></article>
+            <article><strong><%= analytics.buyersCount %></strong><span><%= t('home_verified_buyers') %></span></article>
+            <article><strong><%= analytics.inventoryUnits %></strong><span><%= t('home_loads_available') %></span></article>
+            <article><strong><%= formatCurrency(analytics.totalSalesCents) %></strong><span><%= t('home_sales_processed') %></span></article>
+          </div>
+        </div>
+        <div class="hero-note card">
+          <p class="eyebrow"><%= t('home_best_for') %></p>
+          <h3><%= t('home_best_for_title') %></h3>
+          <p><%= t('home_best_for_copy') %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-block">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow"><%= t('home_featured_eyebrow') %></p>
+        <h2><%= t('home_featured_title') %></h2>
+      </div>
+      <a href="/products"><%= t('home_view_catalog') %></a>
+    </div>
+    <div class="product-grid featured-grid">
+      <% featuredProducts.forEach((product, index) => { %>
+        <article class="product-card card feature-card <%= index === 0 ? 'feature-card-large' : '' %>">
+          <img src="<%= product.images[0] %>" alt="<%= product.title %>">
+          <div class="product-card-body">
+            <div class="card-topline"><span><%= translateCategory(product.category) %></span><span><%= translateCondition(product.condition) %></span></div>
+            <h3><%= product.title %></h3>
+            <p><%= product.description %></p>
+            <div class="meta-row"><span><%= product.quantityAvailable %> <%= t('products_available') %></span><span><%= product.reviewCount %> <%= t('products_reviews') %></span></div>
+            <div class="card-bottom">
+              <strong><%= formatCurrency(product.priceCents) %> / <%= translateUnit(product.unitType) %></strong>
+              <a class="button button-small" href="/products/<%= product.slug %>"><%= t('products_view_load') %></a>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="container trust-band section-block">
+    <article class="card"><span class="eyebrow"><%= t('home_transparency') %></span><h3><%= t('home_transparency_title') %></h3><p><%= t('home_transparency_copy') %></p></article>
+    <article class="card"><span class="eyebrow"><%= t('home_control') %></span><h3><%= t('home_control_title') %></h3><p><%= t('home_control_copy') %></p></article>
+    <article class="card"><span class="eyebrow"><%= t('home_speed') %></span><h3><%= t('home_speed_title') %></h3><p><%= t('home_speed_copy') %></p></article>
+  </section>
+
+  <section class="container section-block">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow"><%= t('home_inquiry_eyebrow') %></p>
+        <h2><%= t('home_inquiry_title') %></h2>
+      </div>
+    </div>
+    <form class="card form-grid inquiry-panel" action="/inquiries" method="post">
+      <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off">
+      <div class="split-grid">
+        <input type="text" name="name" placeholder="<%= t('common_full_name') %>" required>
+        <input type="text" name="company" placeholder="<%= t('common_company') %>" required>
+      </div>
+      <input type="email" name="email" placeholder="<%= t('common_work_email') %>" required>
+      <textarea name="message" placeholder="<%= t('home_inquiry_placeholder') %>" required></textarea>
+      <button class="button" type="submit"><%= t('home_send_inquiry') %></button>
+    </form>
+  </section>
+</main>
+<%- include('partials/footer') %>

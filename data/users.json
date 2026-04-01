@@ -1,0 +1,75 @@
+[
+  {
+    "id": "u-admin-01",
+    "role": "admin",
+    "name": "Nation Ops",
+    "company": "Nation Liquidation Stock",
+    "email": "admin@nationliquidationstock.com",
+    "emailVerified": true,
+    "savedProductIds": [],
+    "createdAt": "2026-03-01T09:00:00.000Z",
+    "passwordHash": "scrypt$ad446f028861f6458fdf1a46ee43be11$4043b5d1c1ef0d842233c65a0efc888da97d7d3a082de9cc2c1405541d419507e99cd8398f3eea5cd002e957b5f6c192d45afb008a9ea181c8f7513239ed8433"
+  },
+  {
+    "id": "u-buyer-01",
+    "role": "buyer",
+    "name": "Amaka Johnson",
+    "company": "Metro Bin Outlet",
+    "email": "buyer@nationliquidationstock.com",
+    "emailVerified": true,
+    "savedProductIds": [
+      "p-mixed-01",
+      "p-home-01"
+    ],
+    "createdAt": "2026-03-03T12:00:00.000Z",
+    "passwordHash": "scrypt$30c1bdb862ca66642d58568ec526ebd7$d3e0b7c02beb72f5891fbc3950c8b9dcaa1fb681e97982da32cd39686db67b48d459aa9bb974d94899d4e7eca61d4b1506d2ac300da0be9fdcb66741e3e58843"
+  },
+  {
+    "id": "u-buyer-02",
+    "role": "buyer",
+    "name": "David Cole",
+    "company": "Cole Export Trading",
+    "email": "pending@nationliquidationstock.com",
+    "emailVerified": false,
+    "savedProductIds": [
+      "p-clothing-01"
+    ],
+    "createdAt": "2026-03-10T12:00:00.000Z",
+    "passwordHash": "scrypt$91166d044fe8af87a7998eec535c98e3$893e00bbdf75521ca8dd0650666711d16a425bb10ec4234f2158ce5032c439642b6d26f89746056791cf3172d6897a309986e0fa3097ae09f255f8589133719c"
+  },
+  {
+    "id": "d9935812-d6d6-4020-8acf-2aa023eb2213",
+    "role": "buyer",
+    "name": "Bouzap Steve ivanel",
+    "company": "Cio",
+    "email": "madridlond@gmail.com",
+    "passwordHash": "scrypt$00643de3f3cbe90cdb7db79e4560340f$db7b5e298200e4b3a3286e0859d9be094fe1fd186b66b91d616e6b66c92313f1b8ded2be4d38c27599b04a09a957a851d8b3bb335dd3bec270f13c5ff4cc28fa",
+    "emailVerified": true,
+    "savedProductIds": [],
+    "createdAt": "2026-03-23T15:05:00.493Z"
+  },
+  {
+    "id": "3aa37cd1-3666-4050-8fcb-829f4d9c9671",
+    "role": "buyer",
+    "name": "monis",
+    "company": "Cio",
+    "email": "bouzapsteve@gmail.com",
+    "passwordHash": "scrypt$6a9b0a2834b58bcdeea324cac6477c73$8d01353246ca833f3200895e74f068275abeb01535db3fb14c58ffc83caf3f45b50fc5325ada20e865433db1911888616c719faffbcc14eac9c517fd7aea8712",
+    "emailVerified": true,
+    "savedProductIds": [],
+    "createdAt": "2026-03-24T22:44:46.132Z"
+  },
+  {
+    "id": "521398aa-dbc4-4a05-9fe2-e2dd0d1047cb",
+    "role": "buyer",
+    "name": "jons man",
+    "company": "manimam",
+    "email": "jans@gmail.com",
+    "passwordHash": "scrypt$c89de907f12cd487cadead2de6138eae$58c5525479c62c865b6bad9bd5911e39c45e5fb2a33fdf8b101dfff70cb339edef0af9f0fb7596d21e729af3f710478fedea909b302df39f3070697ba9b7fe49",
+    "emailVerified": true,
+    "savedProductIds": [
+      "p-clothing-01"
+    ],
+    "createdAt": "2026-03-31T15:05:26.436Z"
+  }
+]
