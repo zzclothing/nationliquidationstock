@@ -8,7 +8,7 @@
     "emailVerified": true,
     "savedProductIds": [],
     "createdAt": "2026-03-01T09:00:00.000Z",
-    "seedPassword": "YourNewAdminPassword123!"
+    "seedPassword": "Admin123!"
   },
   {
     "id": "u-buyer-01",
@@ -22,7 +22,7 @@
       "p-home-01"
     ],
     "createdAt": "2026-03-03T12:00:00.000Z",
-    "passwordHash": "scrypt$30c1bdb862ca66642d58568ec526ebd7$d3e0b7c02beb72f5891fbc3950c8b9dcaa1fb681e97982da32cd39686db67b48d459aa9bb974d94899d4e7eca61d4b1506d2ac300da0be9fdcb66741e3e58843"
+    "seedPassword": "Buy12345!"
   },
   {
     "id": "u-buyer-02",
