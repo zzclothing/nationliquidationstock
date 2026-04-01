@@ -8,7 +8,7 @@
     "emailVerified": true,
     "savedProductIds": [],
     "createdAt": "2026-03-01T09:00:00.000Z",
-    "passwordHash": "scrypt$ad446f028861f6458fdf1a46ee43be11$4043b5d1c1ef0d842233c65a0efc888da97d7d3a082de9cc2c1405541d419507e99cd8398f3eea5cd002e957b5f6c192d45afb008a9ea181c8f7513239ed8433"
+    "seedPassword": "YourNewAdminPassword123!"
   },
   {
     "id": "u-buyer-01",
