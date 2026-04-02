@@ -1,4 +1,4 @@
-<%- include('../partials/head') %>
+﻿<%- include('../partials/head') %>
 <%- include('../partials/header') %>
 <%- include('../partials/alerts') %>
 <main class="container section-block">
@@ -6,12 +6,39 @@
     <div><p class="eyebrow">Platform control</p><h1>Admin dashboard</h1></div>
     <a class="button" href="/admin/products/new">Add inventory</a>
   </div>
+
   <section class="stats-grid">
     <article class="card"><strong><%= formatCurrency(analytics.totalSalesCents) %></strong><span>Sales</span></article>
     <article class="card"><strong><%= analytics.ordersCount %></strong><span>Orders</span></article>
     <article class="card"><strong><%= analytics.inventoryUnits %></strong><span>Inventory units</span></article>
     <article class="card"><strong><%= analytics.openInquiries %></strong><span>Open inquiries</span></article>
   </section>
+
+  <section class="section-block">
+    <h2>Categories</h2>
+    <div class="card form-grid">
+      <form class="inline-form" action="/admin/categories" method="post">
+        <input type="text" name="name" placeholder="New category name" required>
+        <button class="button button-small" type="submit">Create category</button>
+      </form>
+      <div class="inquiry-stack">
+        <% categories.forEach((category) => { %>
+          <article class="card">
+            <form class="inline-form" action="/admin/categories/update" method="post">
+              <input type="hidden" name="currentName" value="<%= category %>">
+              <input type="text" name="nextName" value="<%= category %>" required>
+              <button class="button button-small" type="submit">Save</button>
+            </form>
+            <form action="/admin/categories/delete" method="post">
+              <input type="hidden" name="name" value="<%= category %>">
+              <button class="button button-ghost button-small" type="submit">Delete</button>
+            </form>
+          </article>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
   <section class="section-block">
     <h2>Catalog</h2>
     <div class="card table-wrap">
@@ -34,6 +61,7 @@
       </table>
     </div>
   </section>
+
   <section class="section-block">
     <h2>Recent orders</h2>
     <div class="card table-wrap">
@@ -43,6 +71,7 @@
       </table>
     </div>
   </section>
+
   <section class="section-block">
     <h2>Customer inquiries</h2>
     <div class="card inquiry-stack">

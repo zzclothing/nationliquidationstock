@@ -11,7 +11,7 @@ app.set("trust proxy", 1);
 const scrypt = promisify(crypto.scrypt);
 const SITE_NAME = "Nation Liquidation Stock";
 const WHATSAPP_NUMBER = "12294293042";
-const CATEGORIES = ["Electronics", "Clothing", "Mixed", "Home Goods"];
+const DEFAULT_CATEGORIES = ["Electronics", "Clothing", "Mixed", "Home Goods"];
 const CONDITIONS = ["Returns", "Overstock", "Mixed"];
 const SHIPPING_OPTIONS = [{ value: "freight", label: "Freight delivery" }, { value: "pickup", label: "Local pickup" }];
 const SORT_OPTIONS = [{ value: "featured", label: "Featured first" }, { value: "price_asc", label: "Price: low to high" }, { value: "price_desc", label: "Price: high to low" }, { value: "quantity_desc", label: "Most inventory" }, { value: "newest", label: "Newest arrivals" }];
@@ -28,6 +28,7 @@ const SORT_LABEL_KEYS = { featured: "sort_featured", price_asc: "sort_price_asc"
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 const FILES = {
   users: path.join(DATA_DIR, "users.json"),
+  categories: path.join(DATA_DIR, "categories.json"),
   products: path.join(DATA_DIR, "products.json"),
   orders: path.join(DATA_DIR, "orders.json"),
   reviews: path.join(DATA_DIR, "reviews.json"),
@@ -97,6 +98,13 @@ function pickLocale(req) {
   return detected || "en";
 }
 function parseMoneyToCents(value) { const n = Number(value); return Number.isFinite(n) && n > 0 ? Math.round(n * 100) : 0; }
+function normalizeCategoryName(value) { return sanitize(value, 60); }
+async function getCategories() {
+  const categories = await readCollection("categories");
+  if (Array.isArray(categories) && categories.length) return categories;
+  await writeCollection("categories", [...DEFAULT_CATEGORIES]);
+  return [...DEFAULT_CATEGORIES];
+}
 function estimateShipping({ shippingOption = "freight", postalCode = "", quantity = 1, unitType = "pallet" }) {
   const qty = Math.max(Number(quantity) || 1, 1);
   if (shippingOption === "pickup") return { amountCents: 0, label: "Local pickup", eta: "Ready in 2 business days" };
@@ -197,13 +205,14 @@ function validateCheckout(body) {
   }
   return { errors, value };
 }
-function validateProduct(body, files = [], existing = null) {
+async function validateProduct(body, files = [], existing = null) {
+  const categories = await getCategories();
   const imageUrls = parseList(body.imageUrls);
   const uploadUrls = (files || []).map((file) => `/uploads/${path.basename(file.path)}`);
   const value = {
     title: sanitize(body.title, 140),
     description: sanitize(body.description, 4000),
-    category: sanitize(body.category, 60),
+    category: normalizeCategoryName(body.category),
     condition: sanitize(body.condition, 60),
     unitType: body.unitType === "truckload" ? "truckload" : "pallet",
     priceCents: parseMoneyToCents(body.price),
@@ -215,7 +224,7 @@ function validateProduct(body, files = [], existing = null) {
   const errors = [];
   if (!value.title) errors.push("Title is required.");
   if (!value.description) errors.push("Description is required.");
-  if (!CATEGORIES.includes(value.category)) errors.push("Choose a valid category.");
+  if (!categories.includes(value.category)) errors.push("Choose a valid category.");
   if (!CONDITIONS.includes(value.condition)) errors.push("Choose a valid condition.");
   if (!value.priceCents) errors.push("Price must be greater than zero.");
   if (value.quantityAvailable < 1) errors.push("Quantity must be at least 1.");
@@ -241,11 +250,11 @@ function enrichProducts(products, reviews) {
   });
 }
 async function getCatalog(filters = {}) {
-  const [products, reviews] = await Promise.all([readCollection("products"), readCollection("reviews")]);
+  const [products, reviews, categories] = await Promise.all([readCollection("products"), readCollection("reviews"), getCategories()]);
   let catalog = enrichProducts(products, reviews);
   const keyword = sanitize(filters.q || filters.keyword, 120).toLowerCase();
   if (keyword) catalog = catalog.filter((product) => [product.title, product.description, product.category, product.condition, ...(product.manifest || [])].join(" ").toLowerCase().includes(keyword));
-  if (filters.category && CATEGORIES.includes(filters.category)) catalog = catalog.filter((product) => product.category === filters.category);
+  if (filters.category && categories.includes(filters.category)) catalog = catalog.filter((product) => product.category === filters.category);
   if (filters.condition && CONDITIONS.includes(filters.condition)) catalog = catalog.filter((product) => product.condition === filters.condition);
   if (filters.minPrice) { const min = parseMoneyToCents(filters.minPrice); if (min) catalog = catalog.filter((product) => product.priceCents >= min); }
   if (filters.maxPrice) { const max = parseMoneyToCents(filters.maxPrice); if (max) catalog = catalog.filter((product) => product.priceCents <= max); }
@@ -348,10 +357,41 @@ async function addReview(userId, productId, value) {
   reviews.unshift({ id: crypto.randomUUID(), productId, buyerId: userId, rating: value.rating, title: value.title, comment: value.comment, createdAt: new Date().toISOString() });
   await writeCollection("reviews", reviews);
 }
+async function createCategory(name) {
+  const categories = await getCategories();
+  const nextName = normalizeCategoryName(name);
+  if (!nextName) throw new Error("Category name is required.");
+  if (categories.some((entry) => entry.toLowerCase() === nextName.toLowerCase())) throw new Error("That category already exists.");
+  const nextCategories = [...categories, nextName].sort((left, right) => left.localeCompare(right));
+  await writeCollection("categories", nextCategories);
+}
+async function updateCategory(currentName, nextName) {
+  const categories = await getCategories();
+  const existingName = normalizeCategoryName(currentName);
+  const replacementName = normalizeCategoryName(nextName);
+  if (!existingName) throw new Error("Current category is required.");
+  if (!replacementName) throw new Error("New category name is required.");
+  if (!categories.includes(existingName)) throw new Error("Category not found.");
+  if (existingName.toLowerCase() !== replacementName.toLowerCase() && categories.some((entry) => entry.toLowerCase() === replacementName.toLowerCase())) throw new Error("That category already exists.");
+  const products = await readCollection("products");
+  const nextCategories = categories.map((entry) => entry === existingName ? replacementName : entry).sort((left, right) => left.localeCompare(right));
+  const nextProducts = products.map((product) => product.category === existingName ? { ...product, category: replacementName, updatedAt: new Date().toISOString() } : product);
+  await Promise.all([writeCollection("categories", nextCategories), writeCollection("products", nextProducts)]);
+}
+async function deleteCategory(name) {
+  const categories = await getCategories();
+  const targetName = normalizeCategoryName(name);
+  if (!targetName) throw new Error("Category name is required.");
+  if (!categories.includes(targetName)) throw new Error("Category not found.");
+  const products = await readCollection("products");
+  if (products.some((product) => product.category === targetName)) throw new Error("Remove or reassign products using this category before deleting it.");
+  if (categories.length <= 1) throw new Error("At least one category must remain.");
+  await writeCollection("categories", categories.filter((entry) => entry !== targetName));
+}
 async function saveProductRecord(existingId, body, files = [], existingFromRoute = null) {
   const products = await readCollection("products");
   const existing = existingFromRoute || products.find((entry) => entry.id === existingId) || null;
-  const parsed = validateProduct(body, files, existing);
+  const parsed = await validateProduct(body, files, existing);
   if (parsed.errors.length) return { errors: parsed.errors, product: { ...(existing || {}), ...body, images: existing?.images || [] } };
   const slugBase = slugify(parsed.value.title) || crypto.randomUUID();
   const product = { id: existing ? existing.id : crypto.randomUUID(), slug: existing ? existing.slug : slugBase, soldAsIs: true, createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(), ...parsed.value };
@@ -407,9 +447,9 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use((req, res, next) => { req.locale = pickLocale(req); const viewLocale = req.path.startsWith("/admin") ? "en" : req.locale; res.locals.locale = viewLocale; res.locals.t = (key) => t(viewLocale, key); next(); });
 app.use((req, res, next) => { req.flash = (type, message, meta = {}) => { req.session.flashMessages = [...(req.session.flashMessages || []), { type, message, ...meta }]; }; res.locals.flashMessages = req.session.flashMessages || []; delete req.session.flashMessages; next(); });
 app.use(wrap(async (req, res, next) => { if (!req.session.userId) { req.currentUser = null; res.locals.currentUser = null; return next(); } const users = await readCollection("users"); req.currentUser = users.find((user) => user.id === req.session.userId) || null; res.locals.currentUser = req.currentUser; next(); }));
-app.use((req, res, next) => {
+app.use(wrap(async (req, res, next) => {
   res.locals.siteName = SITE_NAME;
-  res.locals.categories = CATEGORIES;
+  res.locals.categories = await getCategories();
   res.locals.conditions = CONDITIONS;
   res.locals.shippingOptions = SHIPPING_OPTIONS;
   res.locals.sortOptions = SORT_OPTIONS;
@@ -420,7 +460,7 @@ app.use((req, res, next) => {
   res.locals.translateUnit = (value) => t(res.locals.locale, UNIT_LABEL_KEYS[value] || value);
   res.locals.translateSort = (value) => t(res.locals.locale, SORT_LABEL_KEYS[value] || value);
   next();
-});
+}));
 app.use((req, res, next) => { res.locals.whatsAppLink = createWhatsAppUrl("Hello Nation Liquidation Stock, I would like help with liquidation inventory."); next(); });
 
 app.get("/", wrap(async (req, res) => {
@@ -545,7 +585,7 @@ app.get("/admin", requireAdmin, wrap(async (req, res) => {
   const [analytics, products, orders, inquiries] = await Promise.all([buildAnalytics(), getCatalog({ sort: "featured" }), readCollection("orders"), readCollection("inquiries")]);
   res.render("admin/dashboard", { title: "Admin dashboard", analytics, products, orders: orders.slice(0, 8), inquiries: inquiries.slice(0, 8) });
 }));
-app.get("/admin/products/new", requireAdmin, (req, res) => res.render("admin/product-form", { title: "Add inventory", product: { title: "", description: "", category: CATEGORIES[0], condition: CONDITIONS[0], unitType: "pallet", quantityAvailable: 1, images: [], manifest: [], featured: false, priceCents: 0 }, formAction: "/admin/products", submitLabel: "Create product" }));
+app.get("/admin/products/new", requireAdmin, (req, res) => res.render("admin/product-form", { title: "Add inventory", product: { title: "", description: "", category: (res.locals.categories[0] || DEFAULT_CATEGORIES[0]), condition: CONDITIONS[0], unitType: "pallet", quantityAvailable: 1, images: [], manifest: [], featured: false, priceCents: 0 }, formAction: "/admin/products", submitLabel: "Create product" }));
 app.post("/admin/products", requireAdmin, upload.array("imageFiles", 4), wrap(async (req, res) => {
   const result = await saveProductRecord(null, req.body, req.files || []);
   if (result.errors.length) return res.status(422).render("admin/product-form", { title: "Add inventory", errors: result.errors, product: { ...req.body, images: [] }, formAction: "/admin/products", submitLabel: "Create product" });
@@ -566,6 +606,33 @@ app.post("/admin/products/:id", requireAdmin, upload.array("imageFiles", 4), wra
   res.redirect("/admin");
 }));
 app.post("/admin/products/:id/delete", requireAdmin, wrap(async (req, res) => { await removeProduct(req.params.id); req.flash("success", "Product removed from the catalog."); res.redirect("/admin"); }));
+app.post("/admin/categories", requireAdmin, wrap(async (req, res) => {
+  try {
+    await createCategory(req.body.name);
+    req.flash("success", "Category added.");
+  } catch (error) {
+    req.flash("error", error.message);
+  }
+  res.redirect("/admin");
+}));
+app.post("/admin/categories/update", requireAdmin, wrap(async (req, res) => {
+  try {
+    await updateCategory(req.body.currentName, req.body.nextName);
+    req.flash("success", "Category updated.");
+  } catch (error) {
+    req.flash("error", error.message);
+  }
+  res.redirect("/admin");
+}));
+app.post("/admin/categories/delete", requireAdmin, wrap(async (req, res) => {
+  try {
+    await deleteCategory(req.body.name);
+    req.flash("success", "Category deleted.");
+  } catch (error) {
+    req.flash("error", error.message);
+  }
+  res.redirect("/admin");
+}));
 app.get("/api/products", wrap(async (req, res) => res.json({ products: await getCatalog(req.query) })));
 app.get("/api/products/:id", wrap(async (req, res) => { const product = await getProduct(req.params.id); if (!product) return res.status(404).json({ error: "Product not found" }); res.json({ product }); }));
 app.get("/api/shipping-estimate", (req, res) => res.json({ estimate: estimateShipping({ ...req.query, locale: req.locale }) }));
@@ -578,6 +645,16 @@ app.use((req, res) => res.status(404).render("errors/404", { title: t(req.locale
 app.use((error, req, res, next) => { console.error(error); if (res.headersSent) return next(error); res.status(500).render("errors/500", { title: t(req.locale, "page_title_server_error") }); });
 async function createApp() { await initializeStore(); return app; }
 module.exports = { createApp };
+
+
+
+
+
+
+
+
+
+
 
 
 
