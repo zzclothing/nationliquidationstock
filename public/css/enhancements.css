@@ -2,7 +2,7 @@ body {
   background:
     radial-gradient(circle at top left, rgba(197, 90, 17, 0.14), transparent 28%),
     radial-gradient(circle at top right, rgba(18, 52, 77, 0.16), transparent 24%),
-    linear-gradient(180deg, #f6f2ea 0%, #ece3d2 100%);
+    linear-gradient(180deg, #ffffff 0%, #ece3d2 100%);
 }
 
 body::before {
