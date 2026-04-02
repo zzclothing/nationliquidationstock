@@ -13,10 +13,10 @@
     "priceCents": 189900,
     "quantityAvailable": 30,
     "images": [
-     "images/products/elec1.jpeg",
-     "images/products/elec1.jpeg",
-     "images/products/elec1.jpeg",
-     "images/products/elec1.jpeg"
+      "/images/products/elec1.jpeg",
+      "/images/products/elec1.jpeg",
+      "/images/products/elec1.jpeg",
+      "/images/products/elec1.jpeg"
     ],
     "manifest": [
       "Bluetooth speakers and soundbars",
@@ -40,8 +40,8 @@
     "priceCents": 925000,
     "quantityAvailable": 70,
     "images": [
-"/images/products/mxed1.jpeg",
-"/images/products/mxed1.jpeg",
+      "/images/products/mxed1.jpeg",
+      "/images/products/mxed1.jpeg"
     ],
     "manifest": [
       "Adult basics and fleece",
@@ -90,10 +90,9 @@
     "priceCents": 154000,
     "quantityAvailable": 50,
     "images": [
-     
-"/images/products/elec1.jpeg",
-"/images/products/elec1.jpeg",
-"/images/products/elec1.jpeg",
+      "/images/products/elec1.jpeg",
+      "/images/products/elec1.jpeg",
+      "/images/products/elec1.jpeg"
     ],
     "manifest": [
       "Throw pillows and comforters",
