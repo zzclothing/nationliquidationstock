@@ -13,9 +13,10 @@
     "priceCents": 189900,
     "quantityAvailable": 30,
     "images": [
-      "/uploads/1774964842556-798da2a2-9aa2-4e94-8429-a4712563df1c.jpeg",
-      "/uploads/1774964842581-61d4f226-54c6-4e24-93db-998a3d1c513e.jpeg",
-      "/uploads/1774964842609-5c7bd3ad-0f8a-46f0-83bc-b9321e987289.jpeg"
+     "images/products/elec1.jpeg",
+     "images/products/elec1.jpeg",
+     "images/products/elec1.jpeg",
+     "images/products/elec1.jpeg"
     ],
     "manifest": [
       "Bluetooth speakers and soundbars",
@@ -39,10 +40,8 @@
     "priceCents": 925000,
     "quantityAvailable": 70,
     "images": [
-      "/uploads/1774965500814-1dcec5ee-8760-4b0d-aaed-d5004a44e14c.jpeg",
-      "/uploads/1774965500847-e24a595b-604c-4db2-96df-c1d2aad6fec2.jpeg",
-      "/uploads/1774965500869-9b8affd7-febc-4d8b-9d95-2d3eff896ce3.jpeg",
-      "/uploads/1774965500884-661240fe-0791-407b-a815-21f48435c65e.jpeg"
+"/images/products/mxed1.jpeg",
+"/images/products/mxed1.jpeg",
     ],
     "manifest": [
       "Adult basics and fleece",
@@ -65,11 +64,9 @@
     "priceCents": 109500,
     "quantityAvailable": 9,
     "images": [
-      "/uploads/1774964597163-62c62d8b-0494-40ba-a742-7df89a257454.jpeg",
-      "/uploads/1774964597189-1c03fd1d-2fa2-4b2d-98fb-ae784f1f04d3.jpeg",
-      "/uploads/1774964514731-972006d0-3a9c-4fca-9fda-a740f8a88c90.jpeg",
-      "/uploads/1774964597163-62c62d8b-0494-40ba-a742-7df89a257454.jpeg",
-      "/uploads/1774964597189-1c03fd1d-2fa2-4b2d-98fb-ae784f1f04d3.jpeg"
+      "/images/products/mxed2.jpeg",
+      "/images/products/mxed2.jpeg",
+      "/images/products/mxed2.jpeg"
     ],
     "manifest": [
       "Toys and seasonal decor",
@@ -93,10 +90,10 @@
     "priceCents": 154000,
     "quantityAvailable": 50,
     "images": [
-      "/uploads/1774965723907-5eadca02-b9f7-4d8d-ae04-2273bd6184f0.jpeg",
-      "/uploads/1774965723927-03a3ae14-5884-4472-842b-51cb16c628db.jpeg",
-      "/uploads/1774965723940-23b30d96-26b5-492a-b9c9-7e88020b6b5b.jpeg",
-      "/uploads/1774965723961-9c5f6111-8705-4c4c-97c8-218baf413ff1.jpeg"
+     
+"/images/products/elec1.jpeg",
+"/images/products/elec1.jpeg",
+"/images/products/elec1.jpeg",
     ],
     "manifest": [
       "Throw pillows and comforters",
@@ -120,7 +117,9 @@
     "priceCents": 167500,
     "quantityAvailable": 25,
     "images": [
-      "/images/products/gaming-returns-1.svg"
+      "/images/products/elec2.jpeg",
+      "/images/products/elec2.jpeg",
+      "/images/products/elec2.jpeg"
     ],
     "manifest": [
       "Controllers and headset assortments",
@@ -140,7 +139,9 @@
     "priceCents": 84500,
     "quantityAvailable": 18,
     "images": [
-      "/images/products/bargain-returns-1.svg"
+      "/images/products/mixed2.jpeg",
+      "/images/products/mixed2.jpeg",
+      "/images/products/mixed2.jpeg"
     ],
     "manifest": [
       "Soft goods",
