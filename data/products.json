@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "id": "p-elec-01",
     "slug": "amazon-electronics-returns-premium-pallet",
@@ -64,9 +64,7 @@
     "priceCents": 109500,
     "quantityAvailable": 9,
     "images": [
-      "/images/products/mxed2.jpeg",
-      "/images/products/mxed2.jpeg",
-      "/images/products/mxed2.jpeg"
+     "/images/products/food.jpeg"
     ],
     "manifest": [
       "Toys and seasonal decor",
