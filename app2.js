@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 const session = require("express-session");
 const fs = require("fs/promises");
 const path = require("path");
@@ -76,7 +76,7 @@ function normalizeUploadedFiles(files) {
   return list.filter((file) => file && ((file.buffer && file.buffer.length > 0) || (file.size && file.size > 0) || file.path));
 }
 async function uploadImageFile(file) {
-  if (!CLOUDINARY_ENABLED) return `/uploads/${path.basename(file.path)}`;
+  if (!CLOUDINARY_ENABLED) return file?.path ? `/uploads/${path.basename(file.path)}` : null;
   if (!file.buffer || file.buffer.length === 0) {
     if (file.path) {
       const diskBuffer = await fs.readFile(file.path);
@@ -102,7 +102,8 @@ async function uploadImageFile(file) {
 }
 async function uploadProductImages(files = []) {
   if (!Array.isArray(files) || files.length === 0) return [];
-  return Promise.all(files.map(uploadImageFile));
+  const uploaded = await Promise.all(files.map(uploadImageFile));
+  return uploaded.filter(Boolean);
 }
 function createWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -254,10 +255,10 @@ function validateCheckout(body) {
   }
   return { errors, value };
 }
-async function validateProduct(body, files = [], existing = null) {
+async function validateProduct(body, uploadedUrls = [], existing = null) {
   const categories = await getCategories();
   const imageUrls = parseList(body.imageUrls);
-  const uploadUrls = (files || []).map((file) => `/uploads/${path.basename(file.path)}`);
+  const normalizedUploads = (Array.isArray(uploadedUrls) ? uploadedUrls : []).map((entry) => sanitize(entry, 500)).filter(Boolean);
   const value = {
     title: sanitize(body.title, 140),
     description: sanitize(body.description, 4000),
@@ -266,7 +267,7 @@ async function validateProduct(body, files = [], existing = null) {
     unitType: body.unitType === "truckload" ? "truckload" : "pallet",
     priceCents: parseMoneyToCents(body.price),
     quantityAvailable: Math.max(Number.parseInt(body.quantityAvailable, 10) || 0, 0),
-    images: [...new Set([...(existing?.images || []), ...imageUrls, ...uploadUrls])],
+    images: [...new Set([...(existing?.images || []), ...imageUrls, ...normalizedUploads])],
     manifest: parseList(body.manifest),
     featured: body.featured === "on" || body.featured === true || body.featured === "true"
   };
