@@ -7,7 +7,7 @@
       <p class="eyebrow"><%= t('dashboard_eyebrow') %></p>
       <h1><%= t('dashboard_welcome') %>, <%= currentUser.name %></h1>
     </div>
-    <span><%= currentUser.company %></span>
+    <% if (currentUser.company) { %><span><%= currentUser.company %></span><% } %>
   </div>
   <% if (!currentUser.emailVerified) { %>
     <section class="card verification-card">

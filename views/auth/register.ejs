@@ -6,7 +6,6 @@
     <h1><%= t('auth_register_heading') %></h1>
     <% if (typeof errors !== 'undefined') { %><div class="inline-errors"><% errors.forEach((error) => { %><p><%= error %></p><% }) %></div><% } %>
     <input type="text" name="name" placeholder="<%= t('common_full_name') %>" value="<%= (typeof form !== 'undefined' && form && form.name) ? form.name : '' %>" required>
-    <input type="text" name="company" placeholder="<%= t('common_company') %>" value="<%= (typeof form !== 'undefined' && form && form.company) ? form.company : '' %>" required>
     <input type="email" name="email" placeholder="<%= t('common_work_email') %>" value="<%= (typeof form !== 'undefined' && form && form.email) ? form.email : '' %>" required>
     <input type="password" name="password" placeholder="<%= t('common_create_password') %>" required>
     <button class="button" type="submit"><%= t('auth_create_account') %></button>

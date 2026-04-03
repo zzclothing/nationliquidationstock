@@ -199,7 +199,6 @@ function validateRegistration(body) {
   const value = { name: sanitize(body.name, 120), company: sanitize(body.company, 120), email: sanitize(body.email, 160).toLowerCase(), password: String(body.password || "") };
   const errors = [];
   if (!value.name) errors.push("Full name is required.");
-  if (!value.company) errors.push("Company name is required.");
   if (!/^\S+@\S+\.\S+$/.test(value.email)) errors.push("A valid email is required.");
   if (value.password.length < 8) errors.push("Password must be at least 8 characters.");
   return { errors, value };
@@ -342,7 +341,7 @@ async function buildAnalytics() {
 async function createBuyer(value) {
   const users = await readCollection("users");
   if (users.some((user) => user.email.toLowerCase() === value.email)) throw new Error("An account with that email already exists.");
-  const user = { id: crypto.randomUUID(), role: "buyer", name: value.name, company: value.company, email: value.email, passwordHash: await hashPassword(value.password), emailVerified: false, savedProductIds: [], createdAt: new Date().toISOString() };
+  const user = { id: crypto.randomUUID(), role: "buyer", name: value.name, company: value.company || "", email: value.email, passwordHash: await hashPassword(value.password), emailVerified: false, savedProductIds: [], createdAt: new Date().toISOString() };
   users.push(user);
   await writeCollection("users", users);
   return { user, token: await issueVerification(user.id) };
@@ -532,7 +531,7 @@ app.get("/", wrap(async (req, res) => {
   res.render("home", { title: t(req.locale, "page_title_home"), featuredProducts: catalog.filter((product) => product.featured).slice(0, 4), analytics });
 }));
 app.get("/products", wrap(async (req, res) => {
-  const filters = { q: req.query.q || "", category: req.query.category || "", condition: req.query.condition || "", minPrice: req.query.minPrice || "", maxPrice: req.query.maxPrice || "", sort: req.query.sort || "featured" };
+  const filters = { q: req.query.q || "", category: req.query.category || "", sort: "newest" };
   res.render("products/index", { title: t(req.locale, "page_title_products"), filters, products: await getCatalog(filters) });
 }));
 app.get("/products/:slug", wrap(async (req, res) => {

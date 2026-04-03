@@ -98,7 +98,13 @@ th, td { text-align: left; padding: .9rem 0; border-bottom: 1px solid var(--line
 }
 @media (max-width: 640px) {
   .container { width: min(100% - 1rem, 1120px); }
-  .product-grid { grid-template-columns: 1fr; }
+  .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+  .catalog-grid .product-card-body { padding: .85rem; gap: .6rem; }
+  .catalog-grid .product-card-body h3 { font-size: 1rem; }
+  .catalog-grid .card-topline, .catalog-grid .meta-row, .catalog-grid .card-bottom { gap: .45rem; font-size: .82rem; }
+  .catalog-grid .card-bottom { align-items: flex-start; flex-direction: column; }
+  .catalog-grid .button-small { width: 100%; }
+  .product-grid:not(.catalog-grid) { grid-template-columns: 1fr; }
   .site-nav { justify-content: flex-start; }
   .lang-switcher { justify-content: flex-start; }
 }

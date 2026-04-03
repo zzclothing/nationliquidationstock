@@ -397,4 +397,12 @@ body::before {
   .site-nav a {
     padding: .62rem .85rem;
   }
+
+  .page-grid {
+    gap: 1rem;
+  }
+
+  .filter-card {
+    position: static;
+  }
 }

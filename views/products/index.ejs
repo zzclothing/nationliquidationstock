@@ -11,17 +11,6 @@
         <option value=""><%= t('products_all_categories') %></option>
         <% categories.forEach((category) => { %><option value="<%= category %>" <%= filters.category === category ? 'selected' : '' %>><%= translateCategory(category) %></option><% }) %>
       </select>
-      <select name="condition">
-        <option value=""><%= t('products_all_conditions') %></option>
-        <% conditions.forEach((condition) => { %><option value="<%= condition %>" <%= filters.condition === condition ? 'selected' : '' %>><%= translateCondition(condition) %></option><% }) %>
-      </select>
-      <div class="split-grid">
-        <input type="number" step="0.01" name="minPrice" placeholder="<%= t('products_min_price') %>" value="<%= filters.minPrice %>">
-        <input type="number" step="0.01" name="maxPrice" placeholder="<%= t('products_max_price') %>" value="<%= filters.maxPrice %>">
-      </div>
-      <select name="sort">
-        <% sortOptions.forEach((option) => { %><option value="<%= option.value %>" <%= filters.sort === option.value ? 'selected' : '' %>><%= translateSort(option.value) %></option><% }) %>
-      </select>
       <button class="button" type="submit"><%= t('products_apply_filters') %></button>
     </form>
   </aside>
@@ -35,7 +24,7 @@
       <span><%= products.length %> <%= t('products_loads') %></span>
     </div>
 
-    <div class="product-grid">
+    <div class="product-grid catalog-grid">
       <% products.forEach((product) => { %>
         <article class="product-card card">
           <img src="<%= product.images && product.images.length ? product.images[0] : '/images/products/mixed-gm-1.svg' %>" alt="<%= product.title %>">
