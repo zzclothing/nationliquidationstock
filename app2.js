@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const multer = require("multer");
 const { v2: cloudinary } = require("cloudinary");
 const { promisify } = require("util");
+const { createStore, createSessionStore } = require("./storage");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -26,8 +27,10 @@ const CATEGORY_LABEL_KEYS = { "Electronics": "category_electronics", "Clothing":
 const CONDITION_LABEL_KEYS = { "Returns": "condition_returns", "Overstock": "condition_overstock", "Mixed": "condition_mixed" };
 const UNIT_LABEL_KEYS = { pallet: "unit_pallet", truckload: "unit_truckload" };
 const SORT_LABEL_KEYS = { featured: "sort_featured", price_asc: "sort_price_asc", price_desc: "sort_price_desc", quantity_desc: "sort_quantity_desc", newest: "sort_newest" };
-const DATA_DIR = path.join(process.cwd(), "data");
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+const PUBLIC_DIR = path.resolve(process.cwd(), "public");
+const DEFAULT_UPLOAD_DIR = path.join(PUBLIC_DIR, "uploads");
+const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(process.cwd(), "data"));
+const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR || DEFAULT_UPLOAD_DIR);
 const PRODUCT_FALLBACK_IMAGE = "/images/products/mixed-gm-1.svg";
 const CLOUDINARY_ENABLED = Boolean(process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET));
 if (CLOUDINARY_ENABLED) {
@@ -52,6 +55,9 @@ const FILES = {
   emailVerifications: path.join(DATA_DIR, "email-verifications.json"),
   passwordResets: path.join(DATA_DIR, "password-resets.json")
 };
+const store = createStore(FILES);
+const SESSION_MAX_AGE = 1000 * 60 * 60 * 12;
+const sessionStore = createSessionStore(session, { ttlMs: SESSION_MAX_AGE });
 const storage = multer.diskStorage({
   destination(req, file, callback) { callback(null, UPLOAD_DIR); },
   filename(req, file, callback) { callback(null, `${Date.now()}-${crypto.randomUUID()}${path.extname(file.originalname) || ".jpg"}`); }
@@ -63,8 +69,6 @@ const upload = multer({
     return callback(null, true);
   }
 });
-const writeQueue = new Map();
-const collectionCache = new Map();
 const wrap = (handler) => (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
 
 function sanitize(value, maxLength = 5000) { return String(value || "").trim().replace(/\s+/g, " ").slice(0, maxLength); }
@@ -175,18 +179,11 @@ async function verifyPassword(password, storedHash) {
   const stored = Buffer.from(key, "hex");
   return stored.length === derived.length && crypto.timingSafeEqual(stored, Buffer.from(derived));
 }
-async function ensureFile(filePath) { try { await fs.access(filePath); } catch (error) { await fs.writeFile(filePath, "[]\n", "utf8"); } }
-async function readCollection(name) { return JSON.parse(await fs.readFile(FILES[name], "utf8")); }
-async function writeCollection(name, value) {
-  const previous = writeQueue.get(name) || Promise.resolve();
-  const next = previous.then(() => fs.writeFile(FILES[name], `${JSON.stringify(value, null, 2)}\n`, "utf8"));
-  writeQueue.set(name, next.catch(() => undefined));
-  await next;
-}
+async function readCollection(name) { return store.readCollection(name); }
+async function writeCollection(name, value) { await store.writeCollection(name, value); }
 async function initializeStore() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
-  await Promise.all(Object.values(FILES).map(ensureFile));
+  await store.init();
   const users = await readCollection("users");
   let changed = false;
   for (const user of users) {
@@ -500,8 +497,17 @@ app.set("views", path.join(process.cwd(), "views"));
 app.locals.formatCurrency = formatCurrency;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(session({ name: "nls.sid", secret: process.env.SESSION_SECRET || "nation-liquidation-stock-dev-secret", resave: false, saveUninitialized: false, proxy: true, cookie: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 1000 * 60 * 60 * 12 } }));
-app.use(express.static(path.join(process.cwd(), "public")));
+app.use(session({
+  name: "nls.sid",
+  secret: process.env.SESSION_SECRET || "nation-liquidation-stock-dev-secret",
+  resave: false,
+  saveUninitialized: false,
+  proxy: true,
+  store: sessionStore || undefined,
+  cookie: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: SESSION_MAX_AGE }
+}));
+app.use(express.static(PUBLIC_DIR));
+if (UPLOAD_DIR !== DEFAULT_UPLOAD_DIR) app.use("/uploads", express.static(UPLOAD_DIR));
 app.use((req, res, next) => { req.locale = pickLocale(req); const viewLocale = req.path.startsWith("/admin") ? "en" : req.locale; res.locals.locale = viewLocale; res.locals.t = (key) => t(viewLocale, key); next(); });
 app.use((req, res, next) => { req.flash = (type, message, meta = {}) => { req.session.flashMessages = [...(req.session.flashMessages || []), { type, message, ...meta }]; }; res.locals.flashMessages = req.session.flashMessages || []; delete req.session.flashMessages; next(); });
 app.use(wrap(async (req, res, next) => { if (!req.session.userId) { req.currentUser = null; res.locals.currentUser = null; return next(); } const users = await readCollection("users"); req.currentUser = users.find((user) => user.id === req.session.userId) || null; res.locals.currentUser = req.currentUser; next(); }));
@@ -702,7 +708,11 @@ app.put("/api/admin/products/:id", requireAdmin, wrap(async (req, res) => { cons
 app.delete("/api/admin/products/:id", requireAdmin, wrap(async (req, res) => { await removeProduct(req.params.id); res.status(204).send(); }));
 app.use((req, res) => res.status(404).render("errors/404", { title: t(req.locale, "page_title_not_found") }));
 app.use((error, req, res, next) => { console.error(error); if (res.headersSent) return next(error); if (error instanceof multer.MulterError || error?.http_code === 400 || /Image upload failed|Empty file|Unexpected field/i.test(String(error?.message || ""))) { req.flash("error", error.message || "Image upload failed. Please try a smaller image."); return res.redirect(req.get("referer") || "/admin"); } res.status(500).render("errors/500", { title: t(req.locale, "page_title_server_error") }); });
-async function createApp() { await initializeStore(); return app; }
+async function createApp() {
+  await initializeStore();
+  if (sessionStore?.init) await sessionStore.init();
+  return app;
+}
 module.exports = { createApp };
 
 
