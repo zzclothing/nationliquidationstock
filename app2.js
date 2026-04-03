@@ -4,6 +4,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
+const { v2: cloudinary } = require("cloudinary");
 const { promisify } = require("util");
 
 const app = express();
@@ -24,8 +25,18 @@ const DICTIONARIES = {
 const CATEGORY_LABEL_KEYS = { "Electronics": "category_electronics", "Clothing": "category_clothing", "Mixed": "category_mixed", "Home Goods": "category_home_goods" };
 const CONDITION_LABEL_KEYS = { "Returns": "condition_returns", "Overstock": "condition_overstock", "Mixed": "condition_mixed" };
 const UNIT_LABEL_KEYS = { pallet: "unit_pallet", truckload: "unit_truckload" };
-const SORT_LABEL_KEYS = { featured: "sort_featured", price_asc: "sort_price_asc", price_desc: "sort_price_desc", quantity_desc: "sort_quantity_desc", newest: "sort_newest" };const DATA_DIR = path.join(process.cwd(), "data");
+const SORT_LABEL_KEYS = { featured: "sort_featured", price_asc: "sort_price_asc", price_desc: "sort_price_desc", quantity_desc: "sort_quantity_desc", newest: "sort_newest" };
+const DATA_DIR = path.join(process.cwd(), "data");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+const CLOUDINARY_ENABLED = Boolean(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
+if (CLOUDINARY_ENABLED) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true
+  });
+}
 const FILES = {
   users: path.join(DATA_DIR, "users.json"),
   categories: path.join(DATA_DIR, "categories.json"),
@@ -55,6 +66,26 @@ function parseList(value) { return (Array.isArray(value) ? value : String(value 
 function slugify(value) { return sanitize(value, 160).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 90); }
 function formatCurrency(cents = 0) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format((Number(cents) || 0) / 100); }
 function createToken() { return crypto.randomBytes(24).toString("hex"); }
+async function uploadImageFile(file) {
+  if (!CLOUDINARY_ENABLED) return `/uploads/${path.basename(file.path)}`;
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "nation-liquidation-stock/products",
+        resource_type: "image"
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      }
+    );
+    stream.end(file.buffer);
+  });
+}
+async function uploadProductImages(files = []) {
+  if (!Array.isArray(files) || files.length === 0) return [];
+  return Promise.all(files.map(uploadImageFile));
+}
 function createWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
@@ -391,7 +422,8 @@ async function deleteCategory(name) {
 async function saveProductRecord(existingId, body, files = [], existingFromRoute = null) {
   const products = await readCollection("products");
   const existing = existingFromRoute || products.find((entry) => entry.id === existingId) || null;
-  const parsed = await validateProduct(body, files, existing);
+  const uploadedUrls = await uploadProductImages(files);
+  const parsed = await validateProduct(body, uploadedUrls, existing);
   if (parsed.errors.length) return { errors: parsed.errors, product: { ...(existing || {}), ...body, images: existing?.images || [] } };
   const slugBase = slugify(parsed.value.title) || crypto.randomUUID();
   const product = { id: existing ? existing.id : crypto.randomUUID(), slug: existing ? existing.slug : slugBase, soldAsIs: true, createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(), ...parsed.value };
@@ -645,6 +677,10 @@ app.use((req, res) => res.status(404).render("errors/404", { title: t(req.locale
 app.use((error, req, res, next) => { console.error(error); if (res.headersSent) return next(error); res.status(500).render("errors/500", { title: t(req.locale, "page_title_server_error") }); });
 async function createApp() { await initializeStore(); return app; }
 module.exports = { createApp };
+
+
+
+
 
 
 
