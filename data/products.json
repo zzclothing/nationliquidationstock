@@ -14,9 +14,7 @@
     "quantityAvailable": 30,
     "images": [
       "/images/products/elec1.jpeg",
-      "/images/products/elec1.jpeg",
-      "/images/products/elec1.jpeg",
-      "/images/products/elec1.jpeg"
+     
     ],
     "manifest": [
       "Bluetooth speakers and soundbars",
@@ -40,8 +38,8 @@
     "priceCents": 925000,
     "quantityAvailable": 70,
     "images": [
-      "/images/products/mxed1.jpeg",
-      "/images/products/mxed1.jpeg"
+      "/images/products/mixed2.jpeg",
+      
     ],
     "manifest": [
       "Adult basics and fleece",
@@ -89,8 +87,7 @@
     "quantityAvailable": 50,
     "images": [
       "/images/products/elec1.jpeg",
-      "/images/products/elec1.jpeg",
-      "/images/products/elec1.jpeg"
+      
     ],
     "manifest": [
       "Throw pillows and comforters",
@@ -115,8 +112,7 @@
     "quantityAvailable": 25,
     "images": [
       "/images/products/elec2.jpeg",
-      "/images/products/elec2.jpeg",
-      "/images/products/elec2.jpeg"
+      
     ],
     "manifest": [
       "Controllers and headset assortments",
@@ -137,8 +133,7 @@
     "quantityAvailable": 18,
     "images": [
       "/images/products/mixed2.jpeg",
-      "/images/products/mixed2.jpeg",
-      "/images/products/mixed2.jpeg"
+      
     ],
     "manifest": [
       "Soft goods",
