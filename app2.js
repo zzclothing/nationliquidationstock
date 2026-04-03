@@ -28,14 +28,18 @@ const UNIT_LABEL_KEYS = { pallet: "unit_pallet", truckload: "unit_truckload" };
 const SORT_LABEL_KEYS = { featured: "sort_featured", price_asc: "sort_price_asc", price_desc: "sort_price_desc", quantity_desc: "sort_quantity_desc", newest: "sort_newest" };
 const DATA_DIR = path.join(process.cwd(), "data");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const CLOUDINARY_ENABLED = Boolean(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
+const CLOUDINARY_ENABLED = Boolean(process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET));
 if (CLOUDINARY_ENABLED) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true
-  });
+  if (process.env.CLOUDINARY_URL) {
+    cloudinary.config(process.env.CLOUDINARY_URL);
+  } else {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true
+    });
+  }
 }
 const FILES = {
   users: path.join(DATA_DIR, "users.json"),
@@ -66,8 +70,22 @@ function parseList(value) { return (Array.isArray(value) ? value : String(value 
 function slugify(value) { return sanitize(value, 160).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 90); }
 function formatCurrency(cents = 0) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format((Number(cents) || 0) / 100); }
 function createToken() { return crypto.randomBytes(24).toString("hex"); }
+function normalizeUploadedFiles(files) {
+  if (!files) return [];
+  const list = Array.isArray(files) ? files : Object.values(files).flat();
+  return list.filter((file) => file && ((file.buffer && file.buffer.length > 0) || (file.size && file.size > 0) || file.path));
+}
 async function uploadImageFile(file) {
   if (!CLOUDINARY_ENABLED) return `/uploads/${path.basename(file.path)}`;
+  if (!file.buffer || file.buffer.length === 0) {
+    if (file.path) {
+      const diskBuffer = await fs.readFile(file.path);
+      if (!diskBuffer || diskBuffer.length === 0) return null;
+      file.buffer = diskBuffer;
+    } else {
+      return null;
+    }
+  }
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
@@ -422,7 +440,12 @@ async function deleteCategory(name) {
 async function saveProductRecord(existingId, body, files = [], existingFromRoute = null) {
   const products = await readCollection("products");
   const existing = existingFromRoute || products.find((entry) => entry.id === existingId) || null;
-  const uploadedUrls = await uploadProductImages(files);
+  let uploadedUrls = [];
+  try {
+    uploadedUrls = await uploadProductImages(files);
+  } catch (error) {
+    return { errors: [error.message || "Image upload failed."], product: { ...(existing || {}), ...body, images: existing?.images || [] } };
+  }
   const parsed = await validateProduct(body, uploadedUrls, existing);
   if (parsed.errors.length) return { errors: parsed.errors, product: { ...(existing || {}), ...body, images: existing?.images || [] } };
   const slugBase = slugify(parsed.value.title) || crypto.randomUUID();
@@ -618,8 +641,9 @@ app.get("/admin", requireAdmin, wrap(async (req, res) => {
   res.render("admin/dashboard", { title: "Admin dashboard", analytics, products, orders: orders.slice(0, 8), inquiries: inquiries.slice(0, 8) });
 }));
 app.get("/admin/products/new", requireAdmin, (req, res) => res.render("admin/product-form", { title: "Add inventory", product: { title: "", description: "", category: (res.locals.categories[0] || DEFAULT_CATEGORIES[0]), condition: CONDITIONS[0], unitType: "pallet", quantityAvailable: 1, images: [], manifest: [], featured: false, priceCents: 0 }, formAction: "/admin/products", submitLabel: "Create product" }));
-app.post("/admin/products", requireAdmin, upload.array("imageFiles", 4), wrap(async (req, res) => {
-  const result = await saveProductRecord(null, req.body, req.files || []);
+const productUpload = upload.fields([{ name: "imageFiles", maxCount: 4 }, { name: "imageFiles[]", maxCount: 4 }]);
+app.post("/admin/products", requireAdmin, productUpload, wrap(async (req, res) => {
+  const result = await saveProductRecord(null, req.body, normalizeUploadedFiles(req.files));
   if (result.errors.length) return res.status(422).render("admin/product-form", { title: "Add inventory", errors: result.errors, product: { ...req.body, images: [] }, formAction: "/admin/products", submitLabel: "Create product" });
   req.flash("success", "Product added to the catalog.");
   res.redirect("/admin");
@@ -629,10 +653,10 @@ app.get("/admin/products/:id/edit", requireAdmin, wrap(async (req, res) => {
   if (!product) return res.status(404).render("errors/404", { title: "Product not found" });
   res.render("admin/product-form", { title: `Edit ${product.title}`, product, formAction: `/admin/products/${product.id}`, submitLabel: "Save changes" });
 }));
-app.post("/admin/products/:id", requireAdmin, upload.array("imageFiles", 4), wrap(async (req, res) => {
+app.post("/admin/products/:id", requireAdmin, productUpload, wrap(async (req, res) => {
   const existing = await getProduct(req.params.id);
   if (!existing) return res.status(404).render("errors/404", { title: "Product not found" });
-  const result = await saveProductRecord(req.params.id, req.body, req.files || [], existing);
+  const result = await saveProductRecord(req.params.id, req.body, normalizeUploadedFiles(req.files), existing);
   if (result.errors.length) return res.status(422).render("admin/product-form", { title: `Edit ${existing.title}`, errors: result.errors, product: { ...existing, ...req.body, images: existing.images }, formAction: `/admin/products/${existing.id}`, submitLabel: "Save changes" });
   req.flash("success", "Product updated.");
   res.redirect("/admin");
@@ -674,9 +698,11 @@ app.post("/api/admin/products", requireAdmin, wrap(async (req, res) => { const r
 app.put("/api/admin/products/:id", requireAdmin, wrap(async (req, res) => { const existing = await getProduct(req.params.id); if (!existing) return res.status(404).json({ error: "Product not found" }); const result = await saveProductRecord(req.params.id, req.body, [], existing); if (result.errors.length) return res.status(422).json({ errors: result.errors }); res.json({ product: result.product }); }));
 app.delete("/api/admin/products/:id", requireAdmin, wrap(async (req, res) => { await removeProduct(req.params.id); res.status(204).send(); }));
 app.use((req, res) => res.status(404).render("errors/404", { title: t(req.locale, "page_title_not_found") }));
-app.use((error, req, res, next) => { console.error(error); if (res.headersSent) return next(error); res.status(500).render("errors/500", { title: t(req.locale, "page_title_server_error") }); });
+app.use((error, req, res, next) => { console.error(error); if (res.headersSent) return next(error); if (error instanceof multer.MulterError || error?.http_code === 400 || /Image upload failed|Empty file|Unexpected field/i.test(String(error?.message || ""))) { req.flash("error", error.message || "Image upload failed. Please try a smaller image."); return res.redirect(req.get("referer") || "/admin"); } res.status(500).render("errors/500", { title: t(req.locale, "page_title_server_error") }); });
 async function createApp() { await initializeStore(); return app; }
 module.exports = { createApp };
+
+
 
 
 
