@@ -28,6 +28,7 @@ const UNIT_LABEL_KEYS = { pallet: "unit_pallet", truckload: "unit_truckload" };
 const SORT_LABEL_KEYS = { featured: "sort_featured", price_asc: "sort_price_asc", price_desc: "sort_price_desc", quantity_desc: "sort_quantity_desc", newest: "sort_newest" };
 const DATA_DIR = path.join(process.cwd(), "data");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+const PRODUCT_FALLBACK_IMAGE = "/images/products/mixed-gm-1.svg";
 const CLOUDINARY_ENABLED = Boolean(process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET));
 if (CLOUDINARY_ENABLED) {
   if (process.env.CLOUDINARY_URL) {
@@ -63,6 +64,7 @@ const upload = multer({
   }
 });
 const writeQueue = new Map();
+const collectionCache = new Map();
 const wrap = (handler) => (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
 
 function sanitize(value, maxLength = 5000) { return String(value || "").trim().replace(/\s+/g, " ").slice(0, maxLength); }

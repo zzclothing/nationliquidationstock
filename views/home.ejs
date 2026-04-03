@@ -1,4 +1,4 @@
-﻿<%- include('partials/head') %>
+<%- include('partials/head') %>
 <%- include('partials/header') %>
 <%- include('partials/alerts') %>
 <main>
@@ -48,7 +48,7 @@
     <div class="product-grid featured-grid">
       <% featuredProducts.forEach((product, index) => { %>
         <article class="product-card card feature-card <%= index === 0 ? 'feature-card-large' : '' %>">
-          <img src="<%= product.images[0] %>" alt="<%= product.title %>">
+          <img src="<%= productPrimaryImage(product) %>" alt="<%= product.title %>">
           <div class="product-card-body">
             <div class="card-topline"><span><%= translateCategory(product.category) %></span><span><%= translateCondition(product.condition) %></span></div>
             <h3><%= product.title %></h3>

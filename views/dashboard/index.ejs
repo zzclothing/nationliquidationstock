@@ -1,4 +1,4 @@
-﻿<%- include('../partials/head') %>
+<%- include('../partials/head') %>
 <%- include('../partials/header') %>
 <%- include('../partials/alerts') %>
 <main class="container section-block">
@@ -27,7 +27,7 @@
     <div class="product-grid">
       <% savedProducts.forEach((product) => { %>
         <article class="product-card card">
-          <img src="<%= product.images[0] %>" alt="<%= product.title %>">
+          <img src="<%= productPrimaryImage(product) %>" alt="<%= product.title %>">
           <div class="product-card-body">
             <h3><%= product.title %></h3>
             <p><%= product.description %></p>

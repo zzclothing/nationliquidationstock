@@ -1,9 +1,9 @@
-﻿<%- include('../partials/head') %>
+<%- include('../partials/head') %>
 <%- include('../partials/header') %>
 <%- include('../partials/alerts') %>
 <main class="container product-detail">
   <section class="gallery-column">
-    <img class="hero-image" src="<%= product.images[0] %>" alt="<%= product.title %>">
+    <img class="hero-image" src="<%= productPrimaryImage(product) %>" alt="<%= product.title %>">
     <div class="thumb-grid">
       <% product.images.forEach((image) => { %><img src="<%= image %>" alt="<%= product.title %>"><% }) %>
     </div>

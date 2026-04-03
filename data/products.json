@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "p-elec-01",
     "slug": "amazon-electronics-returns-premium-pallet",
@@ -13,7 +13,7 @@
     "priceCents": 189900,
     "quantityAvailable": 30,
     "images": [
-      "/images/products/elec1.jpeg",
+     
      
     ],
     "manifest": [
@@ -38,7 +38,7 @@
     "priceCents": 925000,
     "quantityAvailable": 70,
     "images": [
-      "/images/products/mixed2.jpeg",
+      
       
     ],
     "manifest": [
@@ -86,7 +86,7 @@
     "priceCents": 154000,
     "quantityAvailable": 50,
     "images": [
-      "/images/products/elec1.jpeg",
+      
       
     ],
     "manifest": [
@@ -111,7 +111,7 @@
     "priceCents": 167500,
     "quantityAvailable": 25,
     "images": [
-      "/images/products/elec2.jpeg",
+      
       
     ],
     "manifest": [
@@ -132,7 +132,7 @@
     "priceCents": 84500,
     "quantityAvailable": 18,
     "images": [
-      "/images/products/mixed2.jpeg",
+      
       
     ],
     "manifest": [
