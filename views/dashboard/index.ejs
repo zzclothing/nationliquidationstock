@@ -27,7 +27,7 @@
     <div class="product-grid">
       <% savedProducts.forEach((product) => { %>
         <article class="product-card card">
-          <img src="<%= productPrimaryImage(product) %>" alt="<%= product.title %>">
+          <img src="<%= product.images && product.images.length ? product.images[0] : '/images/products/mixed-gm-1.svg' %>" alt="<%= product.title %>">
           <div class="product-card-body">
             <h3><%= product.title %></h3>
             <p><%= product.description %></p>
